@@ -33,3 +33,11 @@ def convert_one_hot_to_ints(oh_targets):
             int_targets.append(non_zero_idx[0, 0])
     
     return int_targets
+
+
+def get_month_from_date(date: str):
+    """
+    Take only the month from a datestring with format yyyy-MM-DD
+    """
+    return date.split('-')[1]
+

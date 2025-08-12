@@ -168,6 +168,7 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
     best_accuracy = 0.0
 
     # Training Loop
+    # pylint: disable=not-callable
     for epoch in tqdm(range(100)):  # Maximum epochs
         model.train()
         train_loss = 0.0
