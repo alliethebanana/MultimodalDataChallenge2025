@@ -143,8 +143,8 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
     # Initialize DataLoaders
     train_dataset = FungiDataset(train_df, image_path, transform=get_transforms(data='train'))
     valid_dataset = FungiDataset(val_df, image_path, transform=get_transforms(data='valid'))
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4)
-    valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=2)
+    valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=2)
 
     # Network Setup
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
