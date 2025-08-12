@@ -25,7 +25,7 @@ class CompleteModel(nn.Module):
         self.possible_targets_oh = convert_int_targets_to_one_hot(
             self.possible_targets, self.num_targets)
         
-        
+
         
 
 
