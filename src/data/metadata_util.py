@@ -23,7 +23,7 @@ def get_num_habitats_substrates():
     return num_habitats, num_substrates 
 
 
-def translate_habitats_to_class_labels(habitats: NDArray):
+def translate_habitats_to_class_labels(habitats: pd.Series):
     """ Get class labels from habitat strings """
     possible_habitat_strings = [
         'coniferous woodland/plantation', 'Unmanaged coniferous woodland',
@@ -36,9 +36,11 @@ def translate_habitats_to_class_labels(habitats: NDArray):
         'heath', 'gravel or clay pit'] 
     possible_habitat_labels = np.arange(1, len(possible_habitat_strings) + 1)
     habitat_labels = np.zeros(habitats.shape[0])
-    # non_nan_habitat_filter = ~habitats.isna()
+    nan_habitat_filter = habitats.isna().values
+    habitats = habitats.values
+    habitats[nan_habitat_filter] = 'nan'
     for i, p_h_str in enumerate(possible_habitat_strings):
-        habitat_labels[np.strings.equal(habitat_labels, p_h_str)] = possible_habitat_labels[i]
+        habitat_labels[np.equal(habitats, p_h_str )] = possible_habitat_labels[i]
 
     return habitat_labels
 
