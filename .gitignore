@@ -173,3 +173,9 @@ __MACOSX/
 *_RAPADEBUG*
 
 
+
+# pixi environments
+.pixi
+*.egg-info
+pixi.lock
+pixi.toml
