@@ -44,3 +44,21 @@ def translate_habitats_to_class_labels(habitats: pd.Series):
 
     return habitat_labels
 
+
+def translate_substrate_to_class_labels(substrates: pd.Series):
+    """ Get class labels from habitat strings """
+    possible_strings = ['soil', 'dead wood (including bark)',
+       'living stems of herbs, grass etc', 'leaf or needle litter',
+       'wood and roots of living trees', 'dead stems of herbs, grass etc',
+       'bark of living trees', 'stems of herbs, grass etc', 'bark',
+       'other substrate', 'wood', 'faeces', 'wood chips or mulch',
+       'mosses', 'fungi']
+    possible_habitat_labels = np.arange(1, len(possible_strings) + 1)
+    labels = np.zeros(substrates.shape[0])
+    nan_habitat_filter = substrates.isna().values
+    substrates = substrates.values
+    substrates[nan_habitat_filter] = 'nan'
+    for i, p_h_str in enumerate(possible_strings):
+        labels[np.equal(substrates, p_h_str )] = possible_habitat_labels[i]
+
+    return labels

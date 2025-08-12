@@ -5,6 +5,8 @@ Model incorporating all steps
 """
 
 
+import pandas as pd
+
 import torch
 import torch.nn as nn
 
@@ -61,11 +63,33 @@ class CompleteModel(nn.Module):
         
         match(md_emb_type.habitat):
             case 'default':
-                self.habitat_emb = 5
+                self.habitat_emb = lambda x: convert_int_targets_to_one_hot(
+                    metadata_util.translate_habitats_to_class_labels(x))
             case _:
                 raise ValueError(f'habitat embedding type not recognized: {md_emb_type.habitat}')
-
-        # Combination type 
+        
+        match(md_emb_type.substrate):
+            case 'default':
+                self.substrate_emb = lambda x: convert_int_targets_to_one_hot(
+                    metadata_util.translate_substrate_to_class_labels(x))
+            case _:
+                raise ValueError(f'substrate embedding type not recognized: {md_emb_type.substrate}')
+        
+        match(md_emb_type.location):
+            case 'default':
+                self.location_emb = lambda x, y: torch.concatenate([x, y], dim = 0)
+            case _:
+                raise ValueError(f'location embedding type not recognized: {md_emb_type.location}')
+        
+        
+        # Combination type
+        match(self.model_config.combination_type):
+            case 'concat':
+                self.comb_type = lambda x, y: torch.concatenate([x, y])
+            case 'dot':
+                self.comb_type = lambda x, y: torch.dot(x, y)
+            case _:
+                raise ValueError(f'combination type not recognized: {self.model_config.combination_type}')
 
 
         # Classifier to use after the combination
@@ -81,14 +105,20 @@ class CompleteModel(nn.Module):
                 raise ValueError(f'classifier type not recognized: {self.model_config.classifier_after_combination}')
 
 
-    def predict_targets(self, image, metadata, device):
+    def predict_targets(self, image, metadata_df: pd.DataFrame, device):
         """ Predicting targets from the image and metadata """
         embedded_image = self.image_embedding(image)
-        # TODO: embedded_metadata = 
-
-
+        embedded_date = self.date_emb(metadata_df['eventDate'].values)
+        embedded_habitat = self.habitat_emb(metadata_df['Habitat'])
+        embedded_substrate = self.substrate_emb(metadata_df['Substrate'])
+        embedding_location = self.location_emb(
+            metadata_df['Latitude'].values, metadata_df['Longitude'].values)
         
+        embedded_metadata = torch.concat(
+            [embedded_date, embedded_habitat, embedded_substrate, embedding_location])
+        
+        combined_embedding = self.comb_type(embedded_image, embedded_metadata)
 
+        output = self.classifier(combined_embedding)
 
-
-
+        return output

@@ -15,8 +15,7 @@ from dataclasses import dataclass
 class MetaDataEmbeddingConfig:
     """ Config class for a metadata embeddings """
     habitat: str # default
-    latitude: str # default
-    longitude: str # default
+    location: str # default (latitude and longitude)
     substrate: str # default
     event_date: str # default
 
