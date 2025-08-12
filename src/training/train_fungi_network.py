@@ -16,7 +16,6 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from torchvision import models
 from sklearn.model_selection import train_test_split
 from logging import getLogger, DEBUG, FileHandler, Formatter, StreamHandler
-import tqdm
 import numpy as np
 from PIL import Image
 import time
