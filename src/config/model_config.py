@@ -34,6 +34,8 @@ class ModelConfig:
 
     combination_type: str 
 
-    model_after_combination: str 
+    size_after_combination: int
+
+    classifier_after_combination: str 
 
 
