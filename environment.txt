@@ -1,0 +1,28 @@
+Installing mmss environment on cpu only machine:
+
+conda create -n mmss python=3.12
+
+conda activate mmss
+
+conda install matplotlib docopt h5py scikit-learn tqdm scipy sympy pandas
+
+conda install conda-forge::albumentations
+
+pip3 install torch torchvision
+
+
+Installing mmss environment on GPU machine:
+
+conda create -n mmss python=3.12
+
+conda activate mmss
+
+conda install conda-forge::albumentations -y
+
+conda install matplotlib docopt h5py scikit-learn tqdm scipy sympy pandas -y
+
+python -m pip install protobuf==3.19.6
+
+python -m pip install torch torchvision 
+
+
