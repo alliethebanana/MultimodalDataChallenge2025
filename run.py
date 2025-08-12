@@ -67,6 +67,7 @@ def train(args:Dict) -> None:
     test_metadata_path = os.path.join(metadata_folder, 'test_metadata.csv')
 
     train_fungi_network(train_metadata_path, image_path, checkpoint_session)
+    logging.info('evaluate_network_on_test_set')
     evaluate_network_on_test_set(test_metadata_path, image_path, checkpoint_session, session)
     
     logging.info('train_fungi_network end')

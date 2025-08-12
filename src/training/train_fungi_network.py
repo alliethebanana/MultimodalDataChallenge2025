@@ -5,6 +5,9 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 from torch.utils.data import DataLoader, Dataset
+
+from tqdm import tqdm
+
 from albumentations import Compose, Normalize, Resize
 from albumentations import RandomResizedCrop, HorizontalFlip, VerticalFlip, RandomBrightnessContrast
 from albumentations.pytorch import ToTensorV2
@@ -165,7 +168,7 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
     best_accuracy = 0.0
 
     # Training Loop
-    for epoch in range(100):  # Maximum epochs
+    for epoch in tqdm(range(100)):  # Maximum epochs
         model.train()
         train_loss = 0.0
         total_correct_train = 0
