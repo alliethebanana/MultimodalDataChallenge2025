@@ -1,3 +1,8 @@
+
+*.ipynb
+logs/
+submit.sh
+
 # Ignore results folder 
 results/
 
