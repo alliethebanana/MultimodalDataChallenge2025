@@ -16,7 +16,6 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from torchvision import models
 from sklearn.model_selection import train_test_split
 from logging import getLogger, DEBUG, FileHandler, Formatter, StreamHandler
-import tqdm
 import numpy as np
 from PIL import Image
 import time
@@ -144,8 +143,8 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
     # Initialize DataLoaders
     train_dataset = FungiDataset(train_df, image_path, transform=get_transforms(data='train'))
     valid_dataset = FungiDataset(val_df, image_path, transform=get_transforms(data='valid'))
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4)
-    valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=2)
+    valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=2)
 
     # Network Setup
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -168,6 +167,7 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
     best_accuracy = 0.0
 
     # Training Loop
+    # pylint: disable=not-callable
     for epoch in tqdm(range(100)):  # Maximum epochs
         model.train()
         train_loss = 0.0
@@ -277,7 +277,7 @@ def evaluate_network_on_test_set(data_file, image_path, checkpoint_dir, session_
     results = []
     model.eval()
     with torch.no_grad():
-        for images, labels, filenames in tqdm.tqdm(test_loader, desc="Evaluating"):
+        for images, labels, filenames in tqdm(test_loader, desc="Evaluating"):
             images = images.to(device)
             outputs = model(images).argmax(1).cpu().numpy()
             results.extend(zip(filenames, outputs))  # Store filenames and predictions only
