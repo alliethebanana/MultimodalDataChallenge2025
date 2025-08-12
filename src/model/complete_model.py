@@ -47,6 +47,7 @@ class CompleteModel(nn.Module):
         match(self.model_config.image_embedding_type):
             case 'default':
                 self.image_embedding = models.efficientnet_b0(pretrained=True)
+                self.image_embedding_size = self.image_embedding.classifier[1].out_features
             case _:
                 raise ValueError(f'image embedding type not recognized: {self.model_config.image_embedding_type}')
 

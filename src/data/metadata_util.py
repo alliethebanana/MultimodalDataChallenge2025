@@ -5,6 +5,10 @@ Util for processing the metadata. E.g. turning the metadata into one-hot encodin
 """
 
 import pandas as pd
+import numpy as np
+from numpy.typing import NDArray
+
+from typing import List
 
 
 def get_num_habitats_substrates():
@@ -19,7 +23,22 @@ def get_num_habitats_substrates():
     return num_habitats, num_substrates 
 
 
-def translate_habitats_to_class_labels(habitats: str):
+def translate_habitats_to_class_labels(habitats: NDArray):
     """ Get class labels from habitat strings """
-    # TODO:
+    possible_habitat_strings = [
+        'coniferous woodland/plantation', 'Unmanaged coniferous woodland',
+        'Mixed woodland (with coniferous and deciduous trees)',
+        'Deciduous woodland', 'Unmanaged deciduous woodland',
+        'park/churchyard', 'Acidic oak woodland', 'dune',
+        'natural grassland', 'Thorny scrubland', 'lawn', 'hedgerow',
+        'garden', 'other habitat', 'meadow', 'roadside', 'Forest bog',
+        'wooded meadow, grazing forest', 'Willow scrubland', 'bog',
+        'heath', 'gravel or clay pit'] 
+    possible_habitat_labels = np.arange(1, len(possible_habitat_strings) + 1)
+    habitat_labels = np.zeros(habitats.shape[0])
+    # non_nan_habitat_filter = ~habitats.isna()
+    for i, p_h_str in enumerate(possible_habitat_strings):
+        habitat_labels[np.strings.equal(habitat_labels, p_h_str)] = possible_habitat_labels[i]
+
+    return habitat_labels
 
