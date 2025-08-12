@@ -4,6 +4,7 @@ Run Script for training fungi classification models
 
 Usage:
     run.py train --checkpoint-folder=<file> --image-folder=<file> --metadata-folder=<file> [options]
+    run.py eval --checkpoint-folder=<file> --image-folder=<file> --metadata-folder=<file> [options]
     
 Options:
     -h --help                               show this screen.
@@ -71,7 +72,40 @@ def train(args:Dict) -> None:
     evaluate_network_on_test_set(test_metadata_path, image_path, checkpoint_session, session)
     
     logging.info('train_fungi_network end')
-        
+
+
+def eval(args:Dict) -> None:
+    """
+    Evaluate model  
+    """   
+    # Path to fungi images 
+    image_path = args['--image-folder'] if args['--image-folder'] else ''
+
+    # Path to metadata file
+    metadata_folder = args['--metadata-folder'] if args['--metadata-folder'] else ''
+
+    # Session name: Change session name for every experiment! 
+    # Session name will be saved as the first line of the prediction file
+    session = args['--session'] if args['--session'] else "EfficientNet"
+
+    # Folder for results of this experiment based on session name:
+    checkpoint_dir = args['--checkpoint-folder'] if args['--checkpoint-folder'] else ''
+
+    if image_path == '' or metadata_folder == '' or checkpoint_dir == '':
+        raise ValueError('Image, metadata and checkpoint folders mus be given.')
+
+    device = 'cuda' if args['--cuda'] else 'cpu'
+
+    logging.info('Device: %s', device)
+
+    checkpoint_session = os.path.join(checkpoint_dir, session)
+    test_metadata_path = os.path.join(metadata_folder, 'test_metadata.csv')
+
+    logging.info('evaluate_network_on_test_set')
+    evaluate_network_on_test_set(test_metadata_path, image_path, checkpoint_session, session)
+    
+    logging.info('train_fungi_network end')
+
 
 def main():     
     """ Set logging and call relevant function """
@@ -90,6 +124,8 @@ def main():
     
     if args['train']:
         train(args)
+    elif args['eval']:
+        eval(args)
     else:
         raise RuntimeError('invalid run mode')
 
