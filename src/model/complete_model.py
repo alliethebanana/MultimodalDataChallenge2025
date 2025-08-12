@@ -11,6 +11,7 @@ import torch.nn as nn
 from torchvision import models
 
 from src.config.model_config import ModelConfig, MetaDataEmbeddingConfig
+from src.data import metadata_util
 from src.util import convert_int_targets_to_one_hot, get_month_from_date
 
 
@@ -26,6 +27,16 @@ class CompleteModel(nn.Module):
         self.possible_targets = torch.arange(self.num_targets)
         self.possible_targets_oh = convert_int_targets_to_one_hot(
             self.possible_targets, self.num_targets)
+        
+        num_habitats, num_substrates = metadata_util.get_num_habitats_substrates()
+
+        if self.model_config.unknown_as_token:
+            num_habitats = num_habitats + 1
+            num_substrates = num_substrates + 1 
+        
+        self.num_habitat_classes = num_habitats
+        self.num_substrate_classes = num_substrates 
+
     
 
     def build_model(self):

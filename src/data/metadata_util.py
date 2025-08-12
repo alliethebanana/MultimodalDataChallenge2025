@@ -19,3 +19,7 @@ def get_num_habitats_substrates():
     return num_habitats, num_substrates 
 
 
+def translate_habitats_to_class_labels(habitats: str):
+    """ Get class labels from habitat strings """
+    # TODO:
+

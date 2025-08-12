@@ -28,6 +28,8 @@ class ModelConfig:
     
     image_embedding_type: str # default
 
+    unknown_as_token: bool
+
     metadata_embedding_type: MetaDataEmbeddingConfig
 
     metadata_embedding_model_before_comb: str 
