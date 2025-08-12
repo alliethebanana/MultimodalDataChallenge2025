@@ -277,7 +277,7 @@ def evaluate_network_on_test_set(data_file, image_path, checkpoint_dir, session_
     results = []
     model.eval()
     with torch.no_grad():
-        for images, labels, filenames in tqdm.tqdm(test_loader, desc="Evaluating"):
+        for images, labels, filenames in tqdm(test_loader, desc="Evaluating"):
             images = images.to(device)
             outputs = model(images).argmax(1).cpu().numpy()
             results.extend(zip(filenames, outputs))  # Store filenames and predictions only
