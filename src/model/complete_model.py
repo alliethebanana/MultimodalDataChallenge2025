@@ -61,7 +61,7 @@ class CompleteModel(nn.Module):
             case 'default':
                 self.classifier = nn.Sequential(
                     nn.Dropout(0.2, inplace=True),
-                    nn.Linear(self.model_config.size_after_combination, 1000, bias=True)
+                    nn.Linear(self.model_config.size_after_combination, 1000, bias=True),
                     nn.Dropout(0.2),
                     nn.Linear(1000, self.num_targets, bias = True)
                     )
