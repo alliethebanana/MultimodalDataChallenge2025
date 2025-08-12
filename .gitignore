@@ -1,6 +1,11 @@
+
 *.ipynb
 logs/
 submit.sh
+
+# Ignore results folder 
+results/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -176,3 +181,9 @@ __MACOSX/
 *_RAPADEBUG*
 
 
+
+# pixi environments
+.pixi
+*.egg-info
+pixi.lock
+pixi.toml
