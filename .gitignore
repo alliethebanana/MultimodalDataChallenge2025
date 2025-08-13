@@ -6,6 +6,9 @@ submit.sh
 testing_metadata.py
 testing_training.py 
 
+# Ignore image features folder
+image_features/ 
+
 # Ignore results folder 
 results/
 
