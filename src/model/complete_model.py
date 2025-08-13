@@ -163,6 +163,7 @@ class CompleteModel(nn.Module):
         embedded_metadata = torch.concat(
             [torch.unsqueeze(embedded_date, 1), 
              embedded_habitat, embedded_substrate, embedding_location], dim = 1)
+        embedded_metadata = embedded_metadata.float()
         embedded_metadata = self.before_comb_model(embedded_metadata)
         
         combined_embedding = self.comb_type(embedded_image, embedded_metadata)
