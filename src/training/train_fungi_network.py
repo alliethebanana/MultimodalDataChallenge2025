@@ -1,26 +1,23 @@
+"""
+
+Training a model 
+
+
+"""
+
+
 import os
-import pandas as pd
 import random
+import time
+import csv
+
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from torch.utils.data import DataLoader, Dataset
 
 from tqdm import tqdm
 
-from albumentations import Compose, Normalize, Resize
-from albumentations import RandomResizedCrop, HorizontalFlip, VerticalFlip, RandomBrightnessContrast
-from albumentations.pytorch import ToTensorV2
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-from torchvision import models
-from sklearn.model_selection import train_test_split
-from logging import getLogger, DEBUG, FileHandler, Formatter, StreamHandler
 import numpy as np
-from PIL import Image
-import time
-import csv
-from collections import Counter
 
 from src.data import load_data
 from src.config.model_config import ModelConfig
@@ -62,64 +59,6 @@ def log_epoch_to_csv(file_path, epoch, epoch_time, train_loss, train_accuracy, v
     with open(file_path, mode='a', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow([epoch, epoch_time, val_loss, val_accuracy, train_loss, train_accuracy])
-
-
-def get_transforms(data):
-    """
-    Return augmentation transforms for the specified mode ('train' or 'valid').
-    """
-    width, height = 224, 224
-    if data == 'train':
-        return Compose([
-            RandomResizedCrop((width, height), scale=(0.8, 1.0)),
-            HorizontalFlip(p=0.5),
-            VerticalFlip(p=0.5),
-            RandomBrightnessContrast(p=0.2),
-            Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ToTensorV2(),
-        ])
-    elif data == 'valid':
-        return Compose([
-            Resize(width, height),
-            Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ToTensorV2(),
-        ])
-    else:
-        raise ValueError("Unknown data mode requested (only 'train' or 'valid' allowed).")
-
-
-class FungiDataset(Dataset):
-    """
-    Making the fungi dataset
-    """
-    def __init__(self, df, path, transform=None):
-        self.df = df
-        self.transform = transform
-        self.path = path
-
-    def __len__(self):
-        return len(self.df)
-
-    def __getitem__(self, idx):
-        file_path = self.df['filename_index'].values[idx]
-        # Get label if it exists; otherwise return None
-        label = self.df['taxonID_index'].values[idx]  # Get label
-        if pd.isnull(label):
-            label = -1  # Handle missing labels for the test dataset
-        else:
-            label = int(label)
-
-        with Image.open(os.path.join(self.path, file_path)) as img:
-            # Convert to RGB mode (handles grayscale images as well)
-            image = img.convert('RGB')
-        image = np.array(image)
-
-        # Apply transformations if available
-        if self.transform:
-            augmented = self.transform(image=image)
-            image = augmented['image']
-
-        return image, label, file_path
 
 
 def train_fungi_network(
