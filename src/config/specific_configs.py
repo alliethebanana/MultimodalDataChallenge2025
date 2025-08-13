@@ -56,7 +56,7 @@ def make_and_save_linear_before_comb_config():
     save_load_json.save_as_json(model_config, config_path)
 
 
-def make_and_save_linear_before_comb_dot_config():
+def make_and_save_linear_before_comb_add_config():
     """
     Make config
     """
@@ -70,11 +70,11 @@ def make_and_save_linear_before_comb_dot_config():
         unknown_as_token=True,
         metadata_embedding_type=metadata_config,
         metadata_embedding_model_before_comb='linear',
-        combination_type='dot',
+        combination_type='add',
         classifier_after_combination='default',
         patience=5)
     
-    config_path = 'configs/linear_b_comb_dot_model_config.json'
+    config_path = 'configs/linear_b_comb_add_model_config.json'
     
     save_load_json.save_as_json(model_config, config_path)
 

@@ -117,12 +117,12 @@ class CompleteModel(nn.Module):
             case 'concat':
                 self.comb_type = lambda x, y: torch.concatenate([x, y], dim = 1)
                 self.size_after_combination = self.metadata_emb_size + self.image_embedding_size
-            case 'dot':
+            case 'add':
                 self.linear_projection = nn.Linear(
                         self.metadata_emb_size, 
                         self.image_embedding_size
                 )
-                self.comb_type = self.dot_reps
+                self.comb_type = self.add_reps
                 self.size_after_combination = self.image_embedding_size
             case _:
                 raise ValueError(
@@ -142,10 +142,10 @@ class CompleteModel(nn.Module):
                     f'classifier type not recognized: {self.model_config.classifier_after_combination}')
 
 
-    def dot_reps(self, img, md):
-        """ Project metadata to same size as image embedding and dot """
+    def add_reps(self, img, md):
+        """ Project metadata to same size as image embedding and add """
         projected_md = self.linear_projection(md)
-        return torch.dot(img, projected_md)
+        return img + projected_md
 
 
     def forward(self, image, metadata: Tuple, device):

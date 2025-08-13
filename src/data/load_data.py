@@ -50,11 +50,16 @@ class FungiDataset(Dataset):
     """
     Making the fungi dataset
     """
-    def __init__(self, df, path, transform=None):
+    def __init__(self, df, path, train_test_final: str, transform=None):
         self.df = df
         self.metadata_dict = preprocess_metadata(df)
         self.transform = transform
         self.path = path
+        self.train_val_test = train_test_final
+
+        dino_features_path = f'image_features/dino_features_resize_1302_{train_test_final}.npy'
+        self.dino_features_array = np.load(dino_features_path)
+
 
     def __len__(self):
         return len(self.df)
@@ -99,8 +104,8 @@ def get_train_dataloaders(
     print('Validation size', len(val_df))
 
     # Initialize DataLoaders
-    train_dataset = FungiDataset(train_df, image_path, transform=get_transforms(data='train'))
-    valid_dataset = FungiDataset(val_df, image_path, transform=get_transforms(data='valid'))
+    train_dataset = FungiDataset(train_df, image_path, 'train', transform=get_transforms(data='train'))
+    valid_dataset = FungiDataset(val_df, image_path, 'train', transform=get_transforms(data='valid'))
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=num_workers)
     valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=num_workers)
 
@@ -112,7 +117,7 @@ def get_test_dataloader(
     """ Get dataloader for test """
     df = pd.read_csv(metadata_path)
     test_df = df[df['filename_index'].str.startswith('fungi_test')]
-    test_dataset = FungiDataset(test_df, image_path, transform=get_transforms(data='valid'))
+    test_dataset = FungiDataset(test_df, image_path, 'test', transform=get_transforms(data='valid'))
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=num_workers)
 
     return test_loader
