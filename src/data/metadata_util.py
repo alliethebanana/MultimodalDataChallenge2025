@@ -8,7 +8,9 @@ import pandas as pd
 import numpy as np
 from numpy.typing import NDArray
 
-from typing import List
+import torch
+
+from src.util import get_month_from_date
 
 
 def get_num_habitats_substrates():
@@ -42,7 +44,7 @@ def translate_habitats_to_class_labels(habitats: pd.Series):
     for i, p_h_str in enumerate(possible_habitat_strings):
         habitat_labels[np.equal(habitats, p_h_str )] = possible_habitat_labels[i]
 
-    return habitat_labels
+    return np.array(habitat_labels)
 
 
 def translate_substrate_to_class_labels(substrates: pd.Series):
@@ -61,4 +63,31 @@ def translate_substrate_to_class_labels(substrates: pd.Series):
     for i, p_h_str in enumerate(possible_strings):
         labels[np.equal(substrates, p_h_str )] = possible_habitat_labels[i]
 
-    return labels
+    return np.array(labels)
+
+
+def preprocess_dates(dates: NDArray):
+    """ Make dates into values """ 
+    processed_dates = [0 if pd.isnull(d) else get_month_from_date(d) 
+                       for d in dates]
+
+    return np.array(processed_dates)
+
+
+def preprocess_metadata(metadata_df: pd.DataFrame):
+    """ Preprocess metadata to dict with tensors """
+    dates = torch.from_numpy(preprocess_dates(metadata_df['eventDate'].values))
+    habitats = torch.from_numpy(translate_habitats_to_class_labels(metadata_df['Habitat']))
+    substrates = torch.from_numpy(translate_substrate_to_class_labels(metadata_df['Substrate']))
+    locations = torch.reshape(
+        torch.vstack([
+            torch.from_numpy(metadata_df['Latitude'].values), 
+            torch.from_numpy(metadata_df['Longitude'].values)]), (-1, 2))
+    
+    metadata_dict = {
+        'eventDate': dates, 
+        'Habitat': habitats, 
+        'Substrate': substrates, 
+        'location': locations}
+    
+    return metadata_dict
