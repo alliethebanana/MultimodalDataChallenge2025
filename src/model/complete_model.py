@@ -4,7 +4,7 @@ Model incorporating all steps
 
 """
 
-from typing import Dict
+from typing import Tuple
 
 import torch
 import torch.nn as nn
@@ -133,13 +133,11 @@ class CompleteModel(nn.Module):
         return torch.dot(img, projected_md)
 
 
-    def forward(self, image, metadata: Dict[str, torch.Tensor], device):
+    def forward(self, image, metadata: Tuple, device):
         """ Predicting targets from the image and metadata """
-        image = image.to(device)
-        dates = metadata['eventDate'].to(device)
-        habitats = metadata['Habitat'].to(device)
-        substrates = metadata['Substrate'].to(device)
-        locations = metadata['location'].to(device)
+        dates, habitats, substrates, locations = metadata
+        dates, habitats = dates.to(device), habitats.to(device)
+        substrates, locations = substrates.to(device), locations.to(device)
 
         embedded_image = self.image_embedding(image)
         embedded_date = self.date_emb(dates)
@@ -157,7 +155,7 @@ class CompleteModel(nn.Module):
         return output
     
 
-    def predict(self, image, metadata: Dict[str, torch.Tensor], device):
+    def predict(self, image, metadata: Tuple, device):
         """ Predicting targets from the image and metadata """
         output = self.forward(image, metadata, device)
         predictions = torch.nn.Softmax(dim=-1)(output)
