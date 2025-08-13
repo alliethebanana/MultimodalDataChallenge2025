@@ -166,6 +166,7 @@ class CompleteModel(nn.Module):
         embedded_metadata = self.before_comb_model(embedded_metadata)
         
         combined_embedding = self.comb_type(embedded_image, embedded_metadata)
+        combined_embedding = combined_embedding.float()
 
         output = self.classifier(combined_embedding)
 

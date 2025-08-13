@@ -71,7 +71,22 @@ def preprocess_dates(dates: NDArray):
     processed_dates = [0 if pd.isnull(d) else get_month_from_date(d) 
                        for d in dates]
 
-    return np.array(processed_dates)
+    return np.array(processed_dates, dtype=float)
+
+
+def preprocess_location(lat: NDArray, long: NDArray):
+    """ Preprocess latitude and longitude"""
+    prep_lat = lat 
+    prep_lat[pd.isnull(lat)] = 0.
+    
+    prep_long = long
+    prep_long[pd.isnull(long)] = 0.
+
+    location = torch.reshape(
+        torch.vstack([
+            torch.from_numpy(prep_lat), 
+            torch.from_numpy(prep_long)]), (-1, 2))
+    return location
 
 
 def preprocess_metadata(metadata_df: pd.DataFrame):
@@ -79,10 +94,9 @@ def preprocess_metadata(metadata_df: pd.DataFrame):
     dates = torch.from_numpy(preprocess_dates(metadata_df['eventDate'].values))
     habitats = torch.from_numpy(translate_habitats_to_class_labels(metadata_df['Habitat']))
     substrates = torch.from_numpy(translate_substrate_to_class_labels(metadata_df['Substrate']))
-    locations = torch.reshape(
-        torch.vstack([
-            torch.from_numpy(metadata_df['Latitude'].values), 
-            torch.from_numpy(metadata_df['Longitude'].values)]), (-1, 2))
+    locations = preprocess_location(
+        metadata_df['Latitude'].values, 
+        metadata_df['Longitude'].values)
     
     metadata_dict = {
         'eventDate': dates, 
