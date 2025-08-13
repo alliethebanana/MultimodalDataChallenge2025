@@ -1,26 +1,27 @@
+"""
+
+Training a model 
+
+
+"""
+
+
 import os
-import pandas as pd
 import random
+import time
+import csv
+
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from torch.utils.data import DataLoader, Dataset
 
 from tqdm import tqdm
 
-from albumentations import Compose, Normalize, Resize
-from albumentations import RandomResizedCrop, HorizontalFlip, VerticalFlip, RandomBrightnessContrast
-from albumentations.pytorch import ToTensorV2
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-from torchvision import models
-from sklearn.model_selection import train_test_split
-from logging import getLogger, DEBUG, FileHandler, Formatter, StreamHandler
 import numpy as np
-from PIL import Image
-import time
-import csv
-from collections import Counter
+
+from src.data import load_data
+from src.config.model_config import ModelConfig
+from src.model.complete_model import CompleteModel
 
 
 
@@ -60,65 +61,9 @@ def log_epoch_to_csv(file_path, epoch, epoch_time, train_loss, train_accuracy, v
         writer.writerow([epoch, epoch_time, val_loss, val_accuracy, train_loss, train_accuracy])
 
 
-def get_transforms(data):
-    """
-    Return augmentation transforms for the specified mode ('train' or 'valid').
-    """
-    width, height = 224, 224
-    if data == 'train':
-        return Compose([
-            RandomResizedCrop((width, height), scale=(0.8, 1.0)),
-            HorizontalFlip(p=0.5),
-            VerticalFlip(p=0.5),
-            RandomBrightnessContrast(p=0.2),
-            Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ToTensorV2(),
-        ])
-    elif data == 'valid':
-        return Compose([
-            Resize(width, height),
-            Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ToTensorV2(),
-        ])
-    else:
-        raise ValueError("Unknown data mode requested (only 'train' or 'valid' allowed).")
-
-
-class FungiDataset(Dataset):
-    """
-    Making the fungi dataset
-    """
-    def __init__(self, df, path, transform=None):
-        self.df = df
-        self.transform = transform
-        self.path = path
-
-    def __len__(self):
-        return len(self.df)
-
-    def __getitem__(self, idx):
-        file_path = self.df['filename_index'].values[idx]
-        # Get label if it exists; otherwise return None
-        label = self.df['taxonID_index'].values[idx]  # Get label
-        if pd.isnull(label):
-            label = -1  # Handle missing labels for the test dataset
-        else:
-            label = int(label)
-
-        with Image.open(os.path.join(self.path, file_path)) as img:
-            # Convert to RGB mode (handles grayscale images as well)
-            image = img.convert('RGB')
-        image = np.array(image)
-
-        # Apply transformations if available
-        if self.transform:
-            augmented = self.transform(image=image)
-            image = augmented['image']
-
-        return image, label, file_path
-
-
-def train_fungi_network(data_file, image_path, checkpoint_dir):
+def train_fungi_network(
+        data_file: str, image_path: str, checkpoint_dir: str, 
+        model_config: ModelConfig):
     """
     Train the network and save the best models based on validation accuracy and loss.
     Incorporates early stopping with a patience of 10 epochs.
@@ -133,26 +78,13 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
     csv_file_path = os.path.join(checkpoint_dir, 'train.csv')
     initialize_csv_logger(csv_file_path)
 
-    # Load metadata
-    df = pd.read_csv(data_file)
-    train_df = df[df['filename_index'].str.startswith('fungi_train')]
-    train_df, val_df = train_test_split(train_df, test_size=0.2, random_state=42)
-    print('Training size', len(train_df))
-    print('Validation size', len(val_df))
 
-    # Initialize DataLoaders
-    train_dataset = FungiDataset(train_df, image_path, transform=get_transforms(data='train'))
-    valid_dataset = FungiDataset(val_df, image_path, transform=get_transforms(data='valid'))
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=2)
-    valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=2)
+    train_loader, valid_loader = load_data.get_train_dataloaders(data_file, image_path)
 
     # Network Setup
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = models.efficientnet_b0(pretrained=True)
-    model.classifier = nn.Sequential(
-        nn.Dropout(0.2),
-        nn.Linear(model.classifier[1].in_features, len(train_df['taxonID_index'].unique()))
-    )
+
+    model = CompleteModel(model_config)
     model.to(device)
 
     # Define Optimization, Scheduler, and Criterion
@@ -161,7 +93,7 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
     criterion = nn.CrossEntropyLoss()
 
     # Early stopping setup
-    patience = 10
+    patience = model_config.patience
     patience_counter = 0
     best_loss = np.inf
     best_accuracy = 0.0
@@ -178,10 +110,11 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
         epoch_start_time = time.time()
         
         # Training Loop
-        for images, labels, _ in train_loader:
+        for images, labels, _, md in train_loader:
             images, labels = images.to(device), labels.to(device)
+
             optimizer.zero_grad()
-            outputs = model(images)
+            outputs = model.predict(images, md, device)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -203,9 +136,9 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
         
         # Validation Loop
         with torch.no_grad():
-            for images, labels, _ in valid_loader:
+            for images, labels, _, md in valid_loader:
                 images, labels = images.to(device), labels.to(device)
-                outputs = model(images)
+                outputs = model.predict(images, md, device)
                 val_loss += criterion(outputs, labels).item()
                 
                 # Calculate validation accuracy
@@ -248,7 +181,8 @@ def train_fungi_network(data_file, image_path, checkpoint_dir):
             print(f"Early stopping triggered. No improvement in validation loss for {patience} epochs.")
             break
 
-def evaluate_network_on_test_set(data_file, image_path, checkpoint_dir, session_name):
+def evaluate_network_on_test_set(
+        data_file, image_path, checkpoint_dir, session_name, model_config: ModelConfig):
     """
     Evaluate network on the test set and save predictions to a CSV file.
     """
@@ -259,17 +193,11 @@ def evaluate_network_on_test_set(data_file, image_path, checkpoint_dir, session_
     best_trained_model = os.path.join(checkpoint_dir, "best_accuracy.pth")
     output_csv_path = os.path.join(checkpoint_dir, "test_predictions.csv")
 
-    df = pd.read_csv(data_file)
-    test_df = df[df['filename_index'].str.startswith('fungi_test')]
-    test_dataset = FungiDataset(test_df, image_path, transform=get_transforms(data='valid'))
-    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4)
+    test_loader = load_data.get_test_dataloader(data_file, image_path)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = models.efficientnet_b0(pretrained=True)
-    model.classifier = nn.Sequential(
-        nn.Dropout(0.2),
-        nn.Linear(model.classifier[1].in_features, 183)  # Number of classes
-    )
+
+    model = CompleteModel(model_config)
     model.load_state_dict(torch.load(best_trained_model))
     model.to(device)
 
@@ -277,9 +205,9 @@ def evaluate_network_on_test_set(data_file, image_path, checkpoint_dir, session_
     results = []
     model.eval()
     with torch.no_grad():
-        for images, labels, filenames in tqdm(test_loader, desc="Evaluating"):
+        for images, labels, filenames, md in tqdm(test_loader, desc="Evaluating"):
             images = images.to(device)
-            outputs = model(images).argmax(1).cpu().numpy()
+            outputs = model.predict(images, md, device).argmax(1).cpu().numpy()
             results.extend(zip(filenames, outputs))  # Store filenames and predictions only
 
     # Save Results to CSV

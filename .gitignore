@@ -3,6 +3,8 @@
 logs/
 submit.sh
 
+testing_metadata.py
+
 # Ignore results folder 
 results/
 
