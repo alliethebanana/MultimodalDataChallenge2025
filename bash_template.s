@@ -30,7 +30,7 @@ conda activate mmss
 
 echo -e "Working dir: $(pwd)\n"
 
-python run.py train --checkpoint-folder=results --image-folder=/scratch/bmgi/FungiImages --metadata-folder=starting_metadata --session=efficientNet1 --cuda
+python run.py train --checkpoint-folder=results --image-folder=/scratch/bmgi/FungiImages --metadata-folder=starting_metadata --model-config=configs/default_model_config.json --session=md_default --cuda
 
 
 echo "Done: $(date +%F-%R:%S)"

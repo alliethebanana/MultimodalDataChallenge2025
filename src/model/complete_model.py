@@ -48,7 +48,8 @@ class CompleteModel(nn.Module):
         # Image embedding type
         match(self.model_config.image_embedding_type):
             case 'default':
-                self.image_embedding = models.efficientnet_b0(pretrained=True)
+                self.image_embedding = models.efficientnet_b0(
+                    weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
                 self.image_embedding.classifier = nn.Sequential(
                     nn.Dropout(0.2),
                     nn.Linear(
@@ -96,11 +97,25 @@ class CompleteModel(nn.Module):
                     f'location embedding type not recognized: {md_emb_type.location}')
         
         self.metadata_emb_size = metadata_emb_size
+
+        # metadata model before combination
+        match(self.model_config.metadata_embedding_model_before_comb):
+            case 'none':
+                self.before_comb_model = lambda x: x 
+            case 'linear':
+                self.before_comb_model = nn.Linear(
+                        self.metadata_emb_size, 
+                        self.image_embedding_size
+                )
+                self.metadata_emb_size = self.image_embedding_size
+            case _:
+                raise ValueError(
+                    f'metadata_embedding_model_before_comb type not recognized: {self.model_config.metadata_embedding_model_before_comb}')
         
         # Combination type
         match(self.model_config.combination_type):
             case 'concat':
-                self.comb_type = lambda x, y: torch.concatenate([x, y])
+                self.comb_type = lambda x, y: torch.concatenate([x, y], dim = 1)
                 self.size_after_combination = self.metadata_emb_size + self.image_embedding_size
             case 'dot':
                 self.linear_projection = nn.Linear(
@@ -146,7 +161,9 @@ class CompleteModel(nn.Module):
         embedding_location = self.location_emb(locations)
         
         embedded_metadata = torch.concat(
-            [embedded_date, embedded_habitat, embedded_substrate, embedding_location])
+            [torch.unsqueeze(embedded_date, 1), 
+             embedded_habitat, embedded_substrate, embedding_location], dim = 1)
+        embedded_metadata = self.before_comb_model(embedded_metadata)
         
         combined_embedding = self.comb_type(embedded_image, embedded_metadata)
 

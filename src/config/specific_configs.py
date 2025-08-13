@@ -23,7 +23,7 @@ def make_and_save_default_config():
         image_embedding_size=200,
         unknown_as_token=True,
         metadata_embedding_type=metadata_config,
-        metadata_embedding_model_before_comb=None,
+        metadata_embedding_model_before_comb='none',
         combination_type='concat',
         classifier_after_combination='default',
         patience=5)

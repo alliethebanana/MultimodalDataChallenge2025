@@ -44,7 +44,7 @@ def translate_habitats_to_class_labels(habitats: pd.Series):
     for i, p_h_str in enumerate(possible_habitat_strings):
         habitat_labels[np.equal(habitats, p_h_str )] = possible_habitat_labels[i]
 
-    return np.array(habitat_labels)
+    return np.array(habitat_labels, dtype=int)
 
 
 def translate_substrate_to_class_labels(substrates: pd.Series):
@@ -63,7 +63,7 @@ def translate_substrate_to_class_labels(substrates: pd.Series):
     for i, p_h_str in enumerate(possible_strings):
         labels[np.equal(substrates, p_h_str )] = possible_habitat_labels[i]
 
-    return np.array(labels)
+    return np.array(labels, dtype=int)
 
 
 def preprocess_dates(dates: NDArray):

@@ -45,7 +45,7 @@ def train(args:Dict) -> None:
     image_path = args['--image-folder'] if args['--image-folder'] else ''
 
     # Path to metadata file
-    # data_file = './starting_metadata'
+    # metadata_folder = 'starting_metadata'
     metadata_folder = args['--metadata-folder'] if args['--metadata-folder'] else ''
 
     # Session name: Change session name for every experiment! 
@@ -53,7 +53,7 @@ def train(args:Dict) -> None:
     session = args['--session'] if args['--session'] else "EfficientNet"
 
     # Folder for results of this experiment based on session name:
-    # checkpoint_dir = "./results"
+    # checkpoint_dir = "results"
     checkpoint_dir = args['--checkpoint-folder'] if args['--checkpoint-folder'] else ''
 
     model_config_path = args['--model-config'] if args['--model-config'] else ''
