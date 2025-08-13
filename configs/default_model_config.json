@@ -1,0 +1,16 @@
+{
+    "random_seed": 0,
+    "image_embedding_type": "default",
+    "image_embedding_size": 200,
+    "unknown_as_token": true,
+    "metadata_embedding_type": {
+        "habitat": "default",
+        "location": "default",
+        "substrate": "default",
+        "event_date": "default"
+    },
+    "metadata_embedding_model_before_comb": null,
+    "combination_type": "concat",
+    "classifier_after_combination": "default",
+    "patience": 5
+}
