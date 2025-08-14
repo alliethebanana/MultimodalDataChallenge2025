@@ -50,7 +50,7 @@ class CompleteModel(nn.Module):
         match(self.model_config.image_embedding_type):
             case 'default':
                 self.image_embedding = models.efficientnet_b0(
-                    weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
+                    pretrained=True)
                 self.image_embedding.classifier = nn.Sequential(
                     nn.Dropout(0.2),
                     nn.Linear(
