@@ -14,6 +14,7 @@ from torchvision import models
 from src.config.model_config import ModelConfig
 from src.data import metadata_util
 from src.model.mlp import SmallMLP
+from src.model.MetadataMLP import MetadataMLP
 from src.util import convert_int_targets_to_one_hot
 
 
@@ -122,6 +123,14 @@ class CompleteModel(nn.Module):
             match(self.model_config.metadata_embedding_model_before_comb):
                 case 'none':
                     self.before_comb_model = lambda x: x 
+                case 'mlp_norm':  #LayerNorm→Dropout→MLP (residual)
+                    self.before_comb_model = MetadataMLP(
+                        in_dim=self.metadata_emb_size,
+                        target_dim=self.image_embedding_size,
+                        hidden=512,         
+                        p_drop=0.3           
+                    )
+                    self.metadata_emb_size = self.image_embedding_size
                 case 'linear':
                     self.before_comb_model = nn.Linear(
                             self.metadata_emb_size, 
