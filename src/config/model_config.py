@@ -46,9 +46,10 @@ def load_model_config(path: str):
     """ Load the model config json """
     json_dict = save_load_json.load_json(path) 
 
-    md_config = MetaDataEmbeddingConfig(**json_dict['metadata_embedding_type'])
+    if json_dict['metadata_embedding_type'] is not None:
+        md_config = MetaDataEmbeddingConfig(**json_dict['metadata_embedding_type'])
 
-    json_dict['metadata_embedding_type'] = md_config
+        json_dict['metadata_embedding_type'] = md_config
 
     model_config = ModelConfig(**json_dict)
 
