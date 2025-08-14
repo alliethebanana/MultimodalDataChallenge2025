@@ -58,6 +58,9 @@ class CompleteModel(nn.Module):
                         self.model_config.image_embedding_size
                 ))
                 self.image_embedding_size = self.model_config.image_embedding_size
+            case 'dino':
+                self.image_embedding = lambda x: x
+                self.image_embedding_size = 384
             case _:
                 raise ValueError(
                     f'image embedding type not recognized: {self.model_config.image_embedding_type}')
