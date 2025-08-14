@@ -33,6 +33,28 @@ def make_and_save_default_config():
     save_load_json.save_as_json(model_config, config_path)
     
 
+def make_and_save_no_meta_config():
+    """
+    Make config
+    """
+    metadata_config = None
+
+    model_config = ModelConfig(
+        random_seed=0, 
+        image_embedding_type='default',
+        image_embedding_size=500,
+        unknown_as_token=True,
+        metadata_embedding_type=metadata_config,
+        metadata_embedding_model_before_comb='none',
+        combination_type='concat',
+        classifier_after_combination='default',
+        patience=5)
+    
+    config_path = 'configs/no_meta_model_config.json'
+    
+    save_load_json.save_as_json(model_config, config_path)
+
+
 def make_and_save_linear_before_comb_config():
     """
     Make config
@@ -78,4 +100,26 @@ def make_and_save_linear_before_comb_add_config():
     
     save_load_json.save_as_json(model_config, config_path)
 
+
+def make_and_save_linear_before_comb_mlp_classifier_config():
+    """
+    Make config
+    """
+    metadata_config = MetaDataEmbeddingConfig(
+        habitat='default', location='default', substrate='default', event_date='default')
+    
+    model_config = ModelConfig(
+        random_seed=0, 
+        image_embedding_type='default',
+        image_embedding_size=200,
+        unknown_as_token=True,
+        metadata_embedding_type=metadata_config,
+        metadata_embedding_model_before_comb='linear',
+        combination_type='concat',
+        classifier_after_combination='mlp',
+        patience=5)
+    
+    config_path = 'configs/linear_b_comb_mlp_class_model_config.json'
+    
+    save_load_json.save_as_json(model_config, config_path)
 

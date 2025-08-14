@@ -10,6 +10,8 @@ conda install conda-forge::albumentations
 
 pip3 install torch torchvision
 
+conda install conda-forge::geohash2
+
 
 Installing mmss environment on GPU machine:
 
@@ -24,5 +26,7 @@ conda install matplotlib docopt h5py scikit-learn tqdm scipy sympy pandas -y
 python -m pip install protobuf==3.19.6
 
 python -m pip install torch torchvision 
+
+conda install conda-forge::geohash2
 
 

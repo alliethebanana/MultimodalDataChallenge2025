@@ -1,0 +1,11 @@
+{
+    "random_seed": 0,
+    "image_embedding_type": "default",
+    "image_embedding_size": 500,
+    "unknown_as_token": true,
+    "metadata_embedding_type": null,
+    "metadata_embedding_model_before_comb": "none",
+    "combination_type": "concat",
+    "classifier_after_combination": "default",
+    "patience": 5
+}

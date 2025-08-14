@@ -62,72 +62,77 @@ class CompleteModel(nn.Module):
                 raise ValueError(
                     f'image embedding type not recognized: {self.model_config.image_embedding_type}')
 
-        # Metadata embedding types
         metadata_emb_size = 0
         md_emb_type = self.model_config.metadata_embedding_type
-        match(md_emb_type.event_date):
-            case 'default':
-                self.date_emb = lambda x: x
-                metadata_emb_size += 1
-            case _:
-                raise ValueError(
-                    f'event_date embedding type not recognized: {md_emb_type.event_date}')
+        if md_emb_type is None:
+            self.size_after_combination = self.image_embedding_size
+            self.metadata_emb_size = metadata_emb_size
         
-        match(md_emb_type.habitat):
-            case 'default':
-                self.habitat_emb = convert_int_targets_to_one_hot
-                metadata_emb_size += self.num_habitat_classes
-            case _:
-                raise ValueError(
-                    f'habitat embedding type not recognized: {md_emb_type.habitat}')
-        
-        match(md_emb_type.substrate):
-            case 'default':
-                self.substrate_emb = convert_int_targets_to_one_hot
-                metadata_emb_size += self.num_substrate_classes
-            case _:
-                raise ValueError(
-                    f'substrate embedding type not recognized: {md_emb_type.substrate}')
-        
-        match(md_emb_type.location):
-            case 'default':
-                self.location_emb = lambda x: x
-                metadata_emb_size += 2
-            case _:
-                raise ValueError(
-                    f'location embedding type not recognized: {md_emb_type.location}')
-        
-        self.metadata_emb_size = metadata_emb_size
+        else:
+            # Metadata embedding types        
+            match(md_emb_type.event_date):
+                case 'default':
+                    self.date_emb = lambda x: x
+                    metadata_emb_size += 1
+                case _:
+                    raise ValueError(
+                        f'event_date embedding type not recognized: {md_emb_type.event_date}')
+            
+            match(md_emb_type.habitat):
+                case 'default':
+                    self.habitat_emb = convert_int_targets_to_one_hot
+                    metadata_emb_size += self.num_habitat_classes
+                case _:
+                    raise ValueError(
+                        f'habitat embedding type not recognized: {md_emb_type.habitat}')
+            
+            match(md_emb_type.substrate):
+                case 'default':
+                    self.substrate_emb = convert_int_targets_to_one_hot
+                    metadata_emb_size += self.num_substrate_classes
+                case _:
+                    raise ValueError(
+                        f'substrate embedding type not recognized: {md_emb_type.substrate}')
+            
+            match(md_emb_type.location):
+                case 'default':
+                    self.location_emb = lambda x: x
+                    metadata_emb_size += 2
+                case _:
+                    raise ValueError(
+                        f'location embedding type not recognized: {md_emb_type.location}')
+            
+            self.metadata_emb_size = metadata_emb_size
 
-        # metadata model before combination
-        match(self.model_config.metadata_embedding_model_before_comb):
-            case 'none':
-                self.before_comb_model = lambda x: x 
-            case 'linear':
-                self.before_comb_model = nn.Linear(
-                        self.metadata_emb_size, 
-                        self.image_embedding_size
-                )
-                self.metadata_emb_size = self.image_embedding_size
-            case _:
-                raise ValueError(
-                    f'metadata_embedding_model_before_comb type not recognized: {self.model_config.metadata_embedding_model_before_comb}')
-        
-        # Combination type
-        match(self.model_config.combination_type):
-            case 'concat':
-                self.comb_type = lambda x, y: torch.concatenate([x, y], dim = 1)
-                self.size_after_combination = self.metadata_emb_size + self.image_embedding_size
-            case 'add':
-                self.linear_projection = nn.Linear(
-                        self.metadata_emb_size, 
-                        self.image_embedding_size
-                )
-                self.comb_type = self.add_reps
-                self.size_after_combination = self.image_embedding_size
-            case _:
-                raise ValueError(
-                    f'combination type not recognized: {self.model_config.combination_type}')
+            # metadata model before combination
+            match(self.model_config.metadata_embedding_model_before_comb):
+                case 'none':
+                    self.before_comb_model = lambda x: x 
+                case 'linear':
+                    self.before_comb_model = nn.Linear(
+                            self.metadata_emb_size, 
+                            self.image_embedding_size
+                    )
+                    self.metadata_emb_size = self.image_embedding_size
+                case _:
+                    raise ValueError(
+                        f'metadata_embedding_model_before_comb type not recognized: {self.model_config.metadata_embedding_model_before_comb}')
+            
+            # Combination type
+            match(self.model_config.combination_type):
+                case 'concat':
+                    self.comb_type = lambda x, y: torch.concatenate([x, y], dim = 1)
+                    self.size_after_combination = self.metadata_emb_size + self.image_embedding_size
+                case 'add':
+                    self.linear_projection = nn.Linear(
+                            self.metadata_emb_size, 
+                            self.image_embedding_size
+                    )
+                    self.comb_type = self.add_reps
+                    self.size_after_combination = self.image_embedding_size
+                case _:
+                    raise ValueError(
+                        f'combination type not recognized: {self.model_config.combination_type}')
 
 
         # Classifier to use after the combination
@@ -162,24 +167,29 @@ class CompleteModel(nn.Module):
 
     def forward(self, image, metadata: Tuple, device):
         """ Predicting targets from the image and metadata """
-        dates, habitats, substrates, locations = metadata
-        dates, habitats = dates.to(device), habitats.to(device)
-        substrates, locations = substrates.to(device), locations.to(device)
-
         embedded_image = self.image_embedding(image)
-        embedded_date = self.date_emb(dates)
-        embedded_habitat = self.habitat_emb(habitats, self.num_habitat_classes)
-        embedded_substrate = self.substrate_emb(substrates, self.num_substrate_classes)
-        embedding_location = self.location_emb(locations)
         
-        embedded_metadata = torch.concat(
-            [torch.unsqueeze(embedded_date, 1), 
-             embedded_habitat, embedded_substrate, embedding_location], dim = 1)
-        embedded_metadata = embedded_metadata.float()
-        embedded_metadata = self.before_comb_model(embedded_metadata)
-        
-        combined_embedding = self.comb_type(embedded_image, embedded_metadata)
-        combined_embedding = combined_embedding.float()
+        if self.metadata_emb_size == 0:
+            combined_embedding = embedded_image
+        else:
+            dates, habitats, substrates, locations = metadata
+            dates, habitats = dates.to(device), habitats.to(device)
+            substrates, locations = substrates.to(device), locations.to(device)
+
+            
+            embedded_date = self.date_emb(dates)
+            embedded_habitat = self.habitat_emb(habitats, self.num_habitat_classes)
+            embedded_substrate = self.substrate_emb(substrates, self.num_substrate_classes)
+            embedding_location = self.location_emb(locations)
+            
+            embedded_metadata = torch.concat(
+                [torch.unsqueeze(embedded_date, 1), 
+                embedded_habitat, embedded_substrate, embedding_location], dim = 1)
+            embedded_metadata = embedded_metadata.float()
+            embedded_metadata = self.before_comb_model(embedded_metadata)
+            
+            combined_embedding = self.comb_type(embedded_image, embedded_metadata)
+            combined_embedding = combined_embedding.float()
 
         output = self.classifier(combined_embedding)
 

@@ -10,6 +10,8 @@ from numpy.typing import NDArray
 
 import torch
 
+import geohash2
+
 from src.util import get_month_from_date
 
 
@@ -74,7 +76,8 @@ def preprocess_dates(dates: NDArray):
     return np.array(processed_dates, dtype=float)
 
 
-def preprocess_location(lat: NDArray, long: NDArray):
+def preprocess_location(
+        lat: NDArray, long: NDArray, emb_type: str = 'geohash', precision=5):
     """ Preprocess latitude and longitude"""
     prep_lat = lat 
     prep_lat[pd.isnull(lat)] = 0.
@@ -82,10 +85,16 @@ def preprocess_location(lat: NDArray, long: NDArray):
     prep_long = long
     prep_long[pd.isnull(long)] = 0.
 
-    location = torch.reshape(
-        torch.vstack([
-            torch.from_numpy(prep_lat), 
-            torch.from_numpy(prep_long)]), (-1, 2))
+    if emb_type == 'geohash':
+        location = [
+            geohash2.encode(prep_lat[i], prep_long[i], precision=precision) 
+            for i in range(prep_lat.shape[0])]
+        location = torch.tensor(location)
+    else:
+        location = torch.reshape(
+            torch.vstack([
+                torch.from_numpy(prep_lat), 
+                torch.from_numpy(prep_long)]), (-1, 2))
     return location
 
 
