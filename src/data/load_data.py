@@ -50,12 +50,13 @@ class FungiDataset(Dataset):
     """
     Making the fungi dataset
     """
-    def __init__(self, df, path, train_test_final: str, transform=None):
+    def __init__(self, df, path, train_test_final: str, use_dino: bool, transform=None):
         self.df = df
         self.metadata_dict = preprocess_metadata(df)
         self.transform = transform
         self.path = path
         self.train_val_test = train_test_final
+        self.use_dino = use_dino
 
         self.cluster_index = pd.read_csv('cluster_index.csv')
         self.dino_order = pd.read_csv(f'{train_test_final}_order.csv').values
@@ -76,9 +77,20 @@ class FungiDataset(Dataset):
         else:
             label = int(label)
         
-        dino_filter = (self.dino_order == file_path).squeeze()
-        dino = self.dino_features_array[dino_filter].squeeze()
-        
+        if self.use_dino:
+            dino_filter = (self.dino_order == file_path).squeeze()
+            image = self.dino_features_array[dino_filter].squeeze()
+        else:
+            with Image.open(os.path.join(self.path, file_path)) as img:
+                # Convert to RGB mode (handles grayscale images as well)
+                image = img.convert('RGB')
+            image = np.array(image)
+
+            # Apply transformations if available
+            if self.transform:
+                augmented = self.transform(image=image)
+                image = augmented['image']
+            
         date = self.metadata_dict['eventDate'][idx]
         habitat = self.metadata_dict['Habitat'][idx]
         substrate = self.metadata_dict['Substrate'][idx]
@@ -86,21 +98,12 @@ class FungiDataset(Dataset):
 
         md = (date, habitat, substrate, location)
 
-        with Image.open(os.path.join(self.path, file_path)) as img:
-            # Convert to RGB mode (handles grayscale images as well)
-            image = img.convert('RGB')
-        image = np.array(image)
-
-        # Apply transformations if available
-        if self.transform:
-            augmented = self.transform(image=image)
-            image = augmented['image']
-
-        return image, label, file_path, md, dino
+        return image, label, file_path, md
 
 
 def get_train_dataloaders(
-        metadata_path: str, image_path: str, num_workers: int = 2):
+        metadata_path: str, image_path: str, 
+        use_dino: bool, num_workers: int = 2):
     """ Get dataloaders for training and validation """
     # Load metadata
     df = pd.read_csv(metadata_path)
@@ -108,10 +111,11 @@ def get_train_dataloaders(
     train_df, val_df = train_test_split(train_df, test_size=0.2, random_state=42)
     print('Training size', len(train_df))
     print('Validation size', len(val_df))
-
+    
     # Initialize DataLoaders
-    train_dataset = FungiDataset(train_df, image_path, 'train', transform=get_transforms(data='train'))
-    valid_dataset = FungiDataset(val_df, image_path, 'train', transform=get_transforms(data='valid'))
+    transform = None if use_dino else get_transforms(data='valid')
+    train_dataset = FungiDataset(train_df, image_path, 'train', use_dino, transform=transform)
+    valid_dataset = FungiDataset(val_df, image_path, 'train', use_dino, transform=transform)
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=num_workers)
     valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=num_workers)
 
@@ -119,11 +123,14 @@ def get_train_dataloaders(
 
 
 def get_test_dataloader(
-        metadata_path: str, image_path: str, num_workers: int = 2):
+        metadata_path: str, image_path: str,
+        use_dino: bool, num_workers: int = 2):
     """ Get dataloader for test """
     df = pd.read_csv(metadata_path)
     test_df = df[df['filename_index'].str.startswith('fungi_test')]
-    test_dataset = FungiDataset(test_df, image_path, 'test', transform=get_transforms(data='valid'))
+    transform = None if use_dino else get_transforms(data='valid')
+    test_dataset = FungiDataset(
+        test_df, image_path, 'test', use_dino, transform=transform)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=num_workers)
 
     return test_loader

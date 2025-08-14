@@ -168,12 +168,9 @@ class CompleteModel(nn.Module):
         return img + projected_md
 
 
-    def forward(self, image, metadata: Tuple, dino_features, device):
+    def forward(self, image, metadata: Tuple, device):
         """ Predicting targets from the image and metadata """
-        if self.model_config.image_embedding_type == 'dino':
-            embedded_image = dino_features.to(device)
-        else:
-            embedded_image = self.image_embedding(image)
+        embedded_image = self.image_embedding(image)
         
         if self.metadata_emb_size == 0:
             combined_embedding = embedded_image
@@ -202,9 +199,9 @@ class CompleteModel(nn.Module):
         return output
     
 
-    def predict(self, image, metadata: Tuple, dino_features, device):
+    def predict(self, image, metadata: Tuple, device):
         """ Predicting targets from the image and metadata """
-        output = self.forward(image, metadata, dino_features, device)
+        output = self.forward(image, metadata, device)
         predictions = torch.nn.Softmax(dim=-1)(output)
 
         return predictions

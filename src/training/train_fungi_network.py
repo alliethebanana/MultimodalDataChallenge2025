@@ -79,7 +79,8 @@ def train_fungi_network(
     initialize_csv_logger(csv_file_path)
 
 
-    train_loader, valid_loader = load_data.get_train_dataloaders(data_file, image_path)
+    train_loader, valid_loader = load_data.get_train_dataloaders(
+        data_file, image_path, model_config.image_embedding_type == 'dino')
 
     # Network Setup
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -110,11 +111,11 @@ def train_fungi_network(
         epoch_start_time = time.time()
         
         # Training Loop
-        for images, labels, _, md, dino in train_loader:
+        for images, labels, _, md in train_loader:
             images, labels = images.to(device), labels.to(device)
 
             optimizer.zero_grad()
-            outputs = model.forward(images, md, dino, device)
+            outputs = model.forward(images, md, device)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -136,9 +137,9 @@ def train_fungi_network(
         
         # Validation Loop
         with torch.no_grad():
-            for images, labels, _, md, dino in valid_loader:
+            for images, labels, _, md in valid_loader:
                 images, labels = images.to(device), labels.to(device)
-                outputs = model.forward(images, md, dino, device)
+                outputs = model.forward(images, md, device)
                 val_loss += criterion(outputs, labels).item()
                 
                 # Calculate validation accuracy
@@ -193,7 +194,8 @@ def evaluate_network_on_test_set(
     best_trained_model = os.path.join(checkpoint_dir, "best_accuracy.pth")
     output_csv_path = os.path.join(checkpoint_dir, "test_predictions.csv")
 
-    test_loader = load_data.get_test_dataloader(data_file, image_path)
+    test_loader = load_data.get_test_dataloader(
+        data_file, image_path, model_config.image_embedding_type == 'dino')
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -205,9 +207,9 @@ def evaluate_network_on_test_set(
     results = []
     model.eval()
     with torch.no_grad():
-        for images, labels, filenames, md, dino in tqdm(test_loader, desc="Evaluating"):
+        for images, labels, filenames, md in tqdm(test_loader, desc="Evaluating"):
             images = images.to(device)
-            outputs = model.forward(images, md, dino, device).argmax(1).cpu().numpy()
+            outputs = model.forward(images, md, device).argmax(1).cpu().numpy()
             results.extend(zip(filenames, outputs))  # Store filenames and predictions only
 
     # Save Results to CSV
