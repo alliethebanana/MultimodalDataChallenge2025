@@ -1,0 +1,16 @@
+{
+    "random_seed": 0,
+    "image_embedding_type": "dino",
+    "image_embedding_size": 384,
+    "unknown_as_token": true,
+    "metadata_embedding_type": {
+        "habitat": "default",
+        "location": "fourier",
+        "substrate": "default",
+        "event_date": "cyclic_month"
+    },
+    "metadata_embedding_model_before_comb": "linear",
+    "combination_type": "concat",
+    "classifier_after_combination": "mlp",
+    "patience": 5
+}

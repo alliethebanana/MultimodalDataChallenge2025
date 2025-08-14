@@ -21,10 +21,13 @@ class SmallMLP(nn.Module):
         
         # Layers
         self.l1 = nn.Linear(in_features=input_dim, out_features=self.num_features, bias=True)
+        self.dropout1 = nn.Dropout(0.25)
         self.l2 = nn.Linear(
             in_features=self.num_features, out_features=self.num_features, bias=True)
+        self.dropout2 = nn.Dropout(0.25)
         self.l3 = nn.Linear(
             in_features=self.num_features, out_features=self.num_features, bias=True)
+        self.dropout3 = nn.Dropout(0.25)
         self.l4 = nn.Linear(
             in_features=self.num_features, out_features=self.final_dim, bias=False)
                 
@@ -40,9 +43,12 @@ class SmallMLP(nn.Module):
         """ The forward pass """
         out = self.l1(x)
         out = self.activation(out)
+        out = self.dropout1(out)
         out = self.l2(out)
         out = self.activation(out)
+        out = self.dropout2(out)
         out = self.l3(out)
         out = self.activation(out)
+        out = self.dropout3(out)
         out = self.l4(out)
         return out
