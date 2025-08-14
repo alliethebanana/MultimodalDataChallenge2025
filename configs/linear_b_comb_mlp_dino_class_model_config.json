@@ -10,7 +10,7 @@
         "event_date": "default"
     },
     "metadata_embedding_model_before_comb": "linear",
-    "combination_type": "concat",
+    "combination_type": "add",
     "classifier_after_combination": "mlp",
     "patience": 5
 }
