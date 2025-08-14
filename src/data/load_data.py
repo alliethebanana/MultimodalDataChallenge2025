@@ -57,6 +57,8 @@ class FungiDataset(Dataset):
         self.path = path
         self.train_val_test = train_test_final
 
+        self.cluster_index = pd.read_csv('cluster_index.csv')
+
         dino_features_path = f'image_features/dino_features_resize_1302_{train_test_final}.npy'
         self.dino_features_array = np.load(dino_features_path)
 
