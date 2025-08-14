@@ -89,9 +89,11 @@ def train_fungi_network(
     model.to(device)
 
     # Define Optimization, Scheduler, and Criterion
-    optimizer = Adam(model.parameters(), lr=0.001)
-    #scheduler = ReduceLROnPlateau(optimizer, 'min', factor=0.9, patience=1, verbose=True, eps=1e-6)
-    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
+
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
+    # Label smoothing for CrossEntropyLoss
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 
     # Early stopping setup
     patience = model_config.patience
