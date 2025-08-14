@@ -105,7 +105,8 @@ def preprocess_metadata(metadata_df: pd.DataFrame):
     substrates = torch.from_numpy(translate_substrate_to_class_labels(metadata_df['Substrate']))
     locations = preprocess_location(
         metadata_df['Latitude'].values, 
-        metadata_df['Longitude'].values)
+        metadata_df['Longitude'].values, 
+        emb_type='default')
     
     metadata_dict = {
         'eventDate': dates, 
