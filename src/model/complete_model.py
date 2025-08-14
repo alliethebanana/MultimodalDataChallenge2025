@@ -23,12 +23,73 @@ from src.util import convert_int_targets_to_one_hot
 from src.model.helpers.CyclicMonth import CyclicMonth
 from src.model.helpers.FourierLatLon import FourierLatLon
 
-def clip_encoding(text,model,tokenizer):
-    text = tokenizer(habs)
+def clip_encoding_habitat(data,model,tokenizer):
+    num_to_string = {0:'null',
+                    1:'Mixed woodland (with coniferous and deciduous trees)',
+                    2:'Unmanaged deciduous woodland', 
+                    3:'Forest bog',
+                    4:'coniferous woodland/plantation', 
+                    5:'Deciduous woodland',
+                    6:'natural grassland', 
+                    7:'lawn', 
+                    8:'Unmanaged coniferous woodland',
+                    9:'garden',
+                    10:'wooded meadow, grazing forest',
+                    11:'dune',
+                    12:'Willow scrubland',
+                    13:'heath',
+                    14:'Acidic oak woodland',
+                    15:'roadside',
+                    16:'Thorny scrubland',
+                    17:'park/churchyard',
+                    18:'Bog woodland',
+                    19:'hedgerow',
+                    20:'gravel or clay pit',
+                    21:'salt meadow',
+                    22:'bog',
+                    23:'meadow',
+                    24:'improved grassland',
+                    25:'other habitat',
+                    26:'roof',
+                    27:'fallow field',
+                    28:'ditch',
+                    29:'fertilized field in rotation'}
+    data = torch.tensor([num_to_string[int(x)] for x in data])
+    text = tokenizer(data)
     with torch.no_grad():
         text_features = model.encode_text(text)
     return text_features
 
+def clip_encoding_substrate(data,model,tokenizer):
+    num_to_string = {0:'null',
+    1:'soil',
+    2:'leaf or needle litter',
+    3:'wood chips or mulch',
+    4:'dead wood (including bark)',
+    5:'bark',
+    6:'wood',
+    7:'bark of living trees',
+    8:'mosses',
+    9:'wood and roots of living trees',
+    10:'stems of herbs, grass etc',
+    11:'peat mosses',
+    12:'dead stems of herbs, grass etc',
+    13:'fungi',
+    14:'other substrate',
+    15:'living stems of herbs, grass etc',
+    16:'living leaves',
+    17:'fire spot',
+    18:'faeces',
+    19:'cones',
+    20:'fruits',
+    21:'catkins'}
+    data = torch.tensor([num_to_string[int(x)] for x in data])
+    text = tokenizer(data)
+    with torch.no_grad():
+        text_features = model.encode_text(text)
+    return text_features
+
+    
 
 class CompleteModel(nn.Module):
     """ 
@@ -106,7 +167,7 @@ class CompleteModel(nn.Module):
                     self.habitat_emb = convert_int_targets_to_one_hot
                     metadata_emb_size += self.num_habitat_classes
                 case 'clip':
-                    self.habitat_emb = partial(clip_encoding,model=self.clip,tokenizer=self.tokenizer)
+                    self.habitat_emb = partial(clip_encoding_habitat,model=self.clip,tokenizer=self.tokenizer)
                     metadata_emb_size += 512
                     
                 case _:
@@ -118,7 +179,7 @@ class CompleteModel(nn.Module):
                     self.substrate_emb = convert_int_targets_to_one_hot
                     metadata_emb_size += self.num_substrate_classes
                 case 'clip':
-                    self.substrate_emb = partial(clip_encoding,model=self.clip,tokenizer=self.tokenizer)
+                    self.substrate_emb = partial(clip_encoding_substrate,model=self.clip,tokenizer=self.tokenizer)
                     metadata_emb_size += 512
                 case _:
                     raise ValueError(

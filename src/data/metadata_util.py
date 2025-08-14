@@ -29,15 +29,8 @@ def get_num_habitats_substrates():
 
 def translate_habitats_to_class_labels(habitats: pd.Series):
     """ Get class labels from habitat strings """
-    possible_habitat_strings = [
-        'coniferous woodland/plantation', 'Unmanaged coniferous woodland',
-        'Mixed woodland (with coniferous and deciduous trees)',
-        'Deciduous woodland', 'Unmanaged deciduous woodland',
-        'park/churchyard', 'Acidic oak woodland', 'dune',
-        'natural grassland', 'Thorny scrubland', 'lawn', 'hedgerow',
-        'garden', 'other habitat', 'meadow', 'roadside', 'Forest bog',
-        'wooded meadow, grazing forest', 'Willow scrubland', 'bog',
-        'heath', 'gravel or clay pit'] 
+    possible_habitat_strings = ['Mixed woodland (with coniferous and deciduous trees)','Unmanaged deciduous woodland', 'Forest bog','coniferous woodland/plantation', 'Deciduous woodland','natural grassland', 'lawn', 'Unmanaged coniferous woodland','garden', 'wooded meadow, grazing forest', 'dune','Willow scrubland', 'heath', 'Acidic oak woodland', 'roadside','Thorny scrubland', 'park/churchyard', 'Bog woodland', 'hedgerow','gravel or clay pit', 'salt meadow', 'bog', 'meadow','improved grassland', 'other habitat', 'roof', 'fallow field','ditch', 'fertilized field in rotation']
+    
     possible_habitat_labels = np.arange(1, len(possible_habitat_strings) + 1)
     habitat_labels = np.zeros(habitats.shape[0])
     nan_habitat_filter = habitats.isna().values
@@ -51,12 +44,13 @@ def translate_habitats_to_class_labels(habitats: pd.Series):
 
 def translate_substrate_to_class_labels(substrates: pd.Series):
     """ Get class labels from habitat strings """
-    possible_strings = ['soil', 'dead wood (including bark)',
-       'living stems of herbs, grass etc', 'leaf or needle litter',
-       'wood and roots of living trees', 'dead stems of herbs, grass etc',
-       'bark of living trees', 'stems of herbs, grass etc', 'bark',
-       'other substrate', 'wood', 'faeces', 'wood chips or mulch',
-       'mosses', 'fungi']
+    possible_strings = ['soil', 'leaf or needle litter', 'wood chips or mulch',
+       'dead wood (including bark)', 'bark', 'wood',
+       'bark of living trees', 'mosses', 'wood and roots of living trees',
+       'stems of herbs, grass etc', 'peat mosses',
+       'dead stems of herbs, grass etc', 'fungi', 'other substrate',
+       'living stems of herbs, grass etc', 'living leaves', 'fire spot',
+       'faeces', 'cones', 'fruits', 'catkins']
     possible_habitat_labels = np.arange(1, len(possible_strings) + 1)
     labels = np.zeros(substrates.shape[0])
     nan_habitat_filter = substrates.isna().values
