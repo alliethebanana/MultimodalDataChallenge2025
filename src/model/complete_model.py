@@ -157,6 +157,7 @@ class CompleteModel(nn.Module):
                 case 'default':
                     self.date_emb = lambda x: x
                     metadata_emb_size += 1
+                    self.date_emb_shape_size = 1 
                 case 'cyclic_month':
                     self.date_emb = CyclicMonth()      # -> (N, 2)
                     date_emb_size = 2
@@ -287,11 +288,18 @@ class CompleteModel(nn.Module):
             embedded_substrate = self.substrate_emb(substrates, self.num_substrate_classes).to(device)
             embedding_location = self.location_emb(locations)
             
-            embedded_metadata = torch.concat(
-                [embedded_date, embedded_habitat, embedded_substrate, embedding_location], dim = 1)
-            embedded_metadata = embedded_metadata.float()
-            embedded_metadata = self.before_comb_model(embedded_metadata)
-            
+            if self.date_emb_shape_size == 1:
+                embedded_metadata = torch.concat(
+                [torch.unsqueeze(embedded_date, 1), 
+                    embedded_habitat, 
+                    embedded_substrate, 
+                    embedding_location], dim = 1)
+            else:
+                embedded_metadata = torch.concat(
+                    [embedded_date, embedded_habitat, embedded_substrate, embedding_location], dim = 1)
+                embedded_metadata = embedded_metadata.float()
+                embedded_metadata = self.before_comb_model(embedded_metadata)
+                
             combined_embedding = self.comb_type(embedded_image, embedded_metadata)
             combined_embedding = combined_embedding.float()
 
