@@ -172,7 +172,9 @@ def make_and_save_cyclical_fourier_config():
 def make_and_save_linear_cyclical_fourier_config():
     """
     Make config
+    
     """
+        
     metadata_config = MetaDataEmbeddingConfig(
         habitat='default', location='fourier', substrate='default', event_date='cyclic_month')
     
@@ -183,7 +185,7 @@ def make_and_save_linear_cyclical_fourier_config():
         unknown_as_token=True,
         metadata_embedding_type=metadata_config,
         metadata_embedding_model_before_comb='linear',
-        combination_type='add',
+        combination_type='concat',
         classifier_after_combination='mlp',
         patience=5)
     
@@ -191,12 +193,15 @@ def make_and_save_linear_cyclical_fourier_config():
     
     save_load_json.save_as_json(model_config, config_path)
 
-def make_and_save_linear_before_comb_add_mlp_dino_classifier_config():
+
+def make_and_save_mlp_norm_cyclical_fourier_config():
     """
     Make config
+    
     """
+        
     metadata_config = MetaDataEmbeddingConfig(
-        habitat='default', location='default', substrate='default', event_date='default')
+        habitat='default', location='fourier', substrate='default', event_date='cyclic_month')
     
     model_config = ModelConfig(
         random_seed=0, 
@@ -204,33 +209,35 @@ def make_and_save_linear_before_comb_add_mlp_dino_classifier_config():
         image_embedding_size=384,
         unknown_as_token=True,
         metadata_embedding_type=metadata_config,
-        metadata_embedding_model_before_comb='linear',
-        combination_type='add',
+        metadata_embedding_model_before_comb='mlp_norm',
+        combination_type='concat',
         classifier_after_combination='mlp',
         patience=5)
     
-    config_path = 'configs/linear_b_comb_mlp_dino_class_model_config.json'
+    config_path = 'configs/mlp_norm_cyclical_fourier_config.json'
     
     save_load_json.save_as_json(model_config, config_path)
 
-def make_and_save_clip_cyclical_fourier_config():
-    """
-    Make config
-    """
-    metadata_config = MetaDataEmbeddingConfig(
-        habitat='clip', location='fourier', substrate='clip', event_date='cyclic_month')
-    
-    model_config = ModelConfig(
-        random_seed=0, 
-        image_embedding_type='dino',
-        image_embedding_size=384,
-        unknown_as_token=True,
-        metadata_embedding_type=metadata_config,
-        metadata_embedding_model_before_comb='linear',
-        combination_type='add',
-        classifier_after_combination='mlp',
-        patience=5)
-    
-    config_path = 'configs/clip_clip_cyclical_fourier_config.json'
-    
-    save_load_json.save_as_json(model_config, config_path)
+    def make_and_save_mlp_norm_cyclical_fourier_clip_config():
+        """
+        Make config
+        
+        """
+            
+        metadata_config = MetaDataEmbeddingConfig(
+            habitat='clip', location='fourier', substrate='clip', event_date='cyclic_month')
+        
+        model_config = ModelConfig(
+            random_seed=0, 
+            image_embedding_type='dino',
+            image_embedding_size=384,
+            unknown_as_token=True,
+            metadata_embedding_type=metadata_config,
+            metadata_embedding_model_before_comb='mlp_norm',
+            combination_type='concat',
+            classifier_after_combination='mlp',
+            patience=5)
+        
+        config_path = 'configs/mlp_norm_cyclical_fourier_clip_config.json'
+        
+        save_load_json.save_as_json(model_config, config_path)

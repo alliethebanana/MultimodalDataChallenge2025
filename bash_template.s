@@ -30,7 +30,7 @@ conda activate mmss
 
 echo -e "Working dir: $(pwd)\n"
 
-python run.py train --checkpoint-folder=results --image-folder=/Data/FungiImages --metadata-path=starting_metadata/metadata-v_3.csv --model-config=configs/default_model_config.json --session=md_default --cuda
+python run.py train --checkpoint-folder=results --image-folder=/Data/FungiImages --metadata-path=starting_metadata/metadata-v_5.csv --model-config=configs/mlp_norm_cyclical_fourier_config.json --session=mlp-norm-cyclical-fourier --cuda
 
 
 echo "Done: $(date +%F-%R:%S)"
