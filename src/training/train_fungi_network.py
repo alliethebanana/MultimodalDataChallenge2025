@@ -114,7 +114,7 @@ def train_fungi_network(
             images, labels = images.to(device), labels.to(device)
 
             optimizer.zero_grad()
-            outputs = model.predict(images, md, device)
+            outputs = model.forward(images, md, device)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -138,7 +138,7 @@ def train_fungi_network(
         with torch.no_grad():
             for images, labels, _, md in valid_loader:
                 images, labels = images.to(device), labels.to(device)
-                outputs = model.predict(images, md, device)
+                outputs = model.forward(images, md, device)
                 val_loss += criterion(outputs, labels).item()
                 
                 # Calculate validation accuracy
@@ -207,7 +207,7 @@ def evaluate_network_on_test_set(
     with torch.no_grad():
         for images, labels, filenames, md in tqdm(test_loader, desc="Evaluating"):
             images = images.to(device)
-            outputs = model.predict(images, md, device).argmax(1).cpu().numpy()
+            outputs = model.forward(images, md, device).argmax(1).cpu().numpy()
             results.extend(zip(filenames, outputs))  # Store filenames and predictions only
 
     # Save Results to CSV
