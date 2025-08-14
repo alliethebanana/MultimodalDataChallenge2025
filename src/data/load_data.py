@@ -134,3 +134,17 @@ def get_test_dataloader(
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=num_workers)
 
     return test_loader
+
+
+def get_final_dataloader(
+        metadata_path: str, image_path: str,
+        use_dino: bool, num_workers: int = 2):
+    """ Get dataloader for test """
+    df = pd.read_csv(metadata_path)
+    final_df = df[df['filename_index'].str.startswith('fungi_final')]
+    transform = None if use_dino else get_transforms(data='valid')
+    test_dataset = FungiDataset(
+        final_df, image_path, 'final', use_dino, transform=transform)
+    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=num_workers)
+
+    return test_loader

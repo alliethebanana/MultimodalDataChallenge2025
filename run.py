@@ -5,7 +5,8 @@ Run Script for training fungi classification models
 Usage:
     run.py train --checkpoint-folder=<file> --image-folder=<file> --metadata-path=<file> --model-config=<file> [options]
     run.py evaluate --checkpoint-folder=<file> --image-folder=<file> --metadata-path=<file> --model-config=<file> [options]
-    
+    run.py final --checkpoint-folder=<file> --image-folder=<file> --metadata-path=<file> --model-config=<file> [options]
+
 Options:
     -h --help                               show this screen.
     --checkpoint-folder=<file>              folder to save trained model(s) in
@@ -32,7 +33,7 @@ from docopt import docopt
 
 from src.config.model_config import load_model_config
 
-from src.training.train_fungi_network import train_fungi_network, evaluate_network_on_test_set
+from src.training.train_fungi_network import train_fungi_network, evaluate_network_on_test_set, evaluate_network_on_final_set
 
 
 
@@ -112,6 +113,44 @@ def evaluate(args:Dict) -> None:
     evaluate_network_on_test_set(
         test_metadata_path, image_path, checkpoint_session, session, model_config)
     
+    logging.info('evaluate_fungi_network end')
+
+
+def final(args:Dict) -> None:
+    """
+    Final model  
+    """   
+    # Path to fungi images 
+    image_path = args['--image-folder'] if args['--image-folder'] else ''
+
+    # Path to metadata file
+    metadata_path = args['--metadata-path'] if args['--metadata-path'] else ''
+
+    # Session name: Change session name for every experiment! 
+    # Session name will be saved as the first line of the prediction file
+    session = args['--session'] if args['--session'] else "EfficientNet"
+
+    # Folder for results of this experiment based on session name:
+    checkpoint_dir = args['--checkpoint-folder'] if args['--checkpoint-folder'] else ''
+
+    model_config_path = args['--model-config'] if args['--model-config'] else ''
+
+    if image_path == '' or metadata_path == '' or checkpoint_dir == '' or model_config_path == '':
+        raise ValueError('Image, metadata, checkpoint and model config paths must be given.')
+
+    device = 'cuda' if args['--cuda'] else 'cpu'
+
+    logging.info('Device: %s', device)
+
+    checkpoint_session = os.path.join(checkpoint_dir, session)
+    test_metadata_path = os.path.join(metadata_path, 'test_metadata.csv')
+
+    model_config = load_model_config(model_config_path)
+
+    logging.info('evaluate_network_on_test_set')
+    evaluate_network_on_final_set(
+        test_metadata_path, image_path, checkpoint_session, session, model_config)
+    
     logging.info('train_fungi_network end')
 
 
@@ -134,6 +173,8 @@ def main():
         train(args)
     elif args['evaluate']:
         evaluate(args)
+    elif args['final']:
+        final(args)
     else:
         raise RuntimeError('invalid run mode')
 
