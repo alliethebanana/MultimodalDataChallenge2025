@@ -1,0 +1,162 @@
+filename_index,priority,reason,label,region,fields_to_buy,estimated_credits,n_fields
+fungi_train002187.jpg,1,rare_class_diverse_regions,68.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train002530.jpg,1,rare_class_diverse_regions,68.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train002671.jpg,1,rare_class_diverse_regions,131.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train002763.jpg,1,rare_class_diverse_regions,68.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train002820.jpg,1,rare_class_diverse_regions,131.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train003186.jpg,1,rare_class_diverse_regions,68.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train003478.jpg,1,rare_class_diverse_regions,113.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004077.jpg,1,rare_class_diverse_regions,131.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004093.jpg,1,rare_class_diverse_regions,113.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004131.jpg,1,rare_class_diverse_regions,113.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004321.jpg,1,rare_class_diverse_regions,113.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004453.jpg,1,rare_class_diverse_regions,68.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004683.jpg,1,rare_class_diverse_regions,113.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004693.jpg,1,rare_class_diverse_regions,131.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train004851.jpg,1,rare_class_diverse_regions,131.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train005314.jpg,1,rare_class_diverse_regions,113.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train006235.jpg,1,rare_class_diverse_regions,131.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train006299.jpg,1,rare_class_diverse_regions,68.0,UNK,"['Habitat', 'Latitude', 'Longitude', 'Substrate', 'eventDate']",8,5
+fungi_train001674.jpg,1,rare_class_diverse_regions,54.0,556_103,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train001841.jpg,1,rare_class_diverse_regions,25.0,550_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002132.jpg,1,rare_class_diverse_regions,126.0,558_83,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002233.jpg,1,rare_class_diverse_regions,46.0,553_118,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002247.jpg,1,rare_class_diverse_regions,40.0,560_95,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002248.jpg,1,rare_class_diverse_regions,119.0,566_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002269.jpg,1,rare_class_diverse_regions,25.0,560_126,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002296.jpg,1,rare_class_diverse_regions,35.0,567_103,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002324.jpg,1,rare_class_diverse_regions,35.0,551_102,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002488.jpg,1,rare_class_diverse_regions,25.0,566_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002505.jpg,1,rare_class_diverse_regions,42.0,552_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002578.jpg,1,rare_class_diverse_regions,78.0,561_95,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002593.jpg,1,rare_class_diverse_regions,107.0,562_96,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002597.jpg,1,rare_class_diverse_regions,46.0,559_102,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002611.jpg,1,rare_class_diverse_regions,32.0,560_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002655.jpg,1,rare_class_diverse_regions,65.0,564_93,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002663.jpg,1,rare_class_diverse_regions,105.0,568_99,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002672.jpg,1,rare_class_diverse_regions,18.0,558_126,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002875.jpg,1,rare_class_diverse_regions,25.0,548_108,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002898.jpg,1,rare_class_diverse_regions,65.0,557_83,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002935.jpg,1,rare_class_diverse_regions,19.0,552_118,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002941.jpg,1,rare_class_diverse_regions,65.0,553_89,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002943.jpg,1,rare_class_diverse_regions,42.0,557_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train002964.jpg,1,rare_class_diverse_regions,42.0,568_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003011.jpg,1,rare_class_diverse_regions,46.0,561_102,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003107.jpg,1,rare_class_diverse_regions,156.0,558_126,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003121.jpg,1,rare_class_diverse_regions,46.0,553_108,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003325.jpg,1,rare_class_diverse_regions,35.0,550_105,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003367.jpg,1,rare_class_diverse_regions,77.0,551_103,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003408.jpg,1,rare_class_diverse_regions,106.0,560_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003548.jpg,1,rare_class_diverse_regions,40.0,556_119,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003571.jpg,1,rare_class_diverse_regions,156.0,561_100,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003603.jpg,1,rare_class_diverse_regions,46.0,571_93,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003629.jpg,1,rare_class_diverse_regions,57.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003641.jpg,1,rare_class_diverse_regions,141.0,561_101,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003670.jpg,1,rare_class_diverse_regions,74.0,563_106,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003733.jpg,1,rare_class_diverse_regions,119.0,573_110,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003755.jpg,1,rare_class_diverse_regions,154.0,547_115,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003789.jpg,1,rare_class_diverse_regions,44.0,562_95,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003806.jpg,1,rare_class_diverse_regions,61.0,559_120,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003836.jpg,1,rare_class_diverse_regions,116.0,557_96,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003883.jpg,1,rare_class_diverse_regions,94.0,566_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003930.jpg,1,rare_class_diverse_regions,152.0,566_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003971.jpg,1,rare_class_diverse_regions,7.0,551_151,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train003980.jpg,1,rare_class_diverse_regions,12.0,558_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004006.jpg,1,rare_class_diverse_regions,20.0,556_119,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004041.jpg,1,rare_class_diverse_regions,74.0,558_125,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004064.jpg,1,rare_class_diverse_regions,2.0,555_97,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004107.jpg,1,rare_class_diverse_regions,77.0,551_106,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004123.jpg,1,rare_class_diverse_regions,137.0,558_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004129.jpg,1,rare_class_diverse_regions,74.0,576_103,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004133.jpg,1,rare_class_diverse_regions,29.0,556_99,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004151.jpg,1,rare_class_diverse_regions,112.0,561_95,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004172.jpg,1,rare_class_diverse_regions,25.0,571_101,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004198.jpg,1,rare_class_diverse_regions,109.0,552_117,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004207.jpg,1,rare_class_diverse_regions,109.0,548_117,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004281.jpg,1,rare_class_diverse_regions,156.0,562_100,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004348.jpg,1,rare_class_diverse_regions,20.0,561_102,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004354.jpg,1,rare_class_diverse_regions,65.0,561_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004359.jpg,1,rare_class_diverse_regions,116.0,555_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004380.jpg,1,rare_class_diverse_regions,139.0,550_125,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004400.jpg,1,rare_class_diverse_regions,29.0,562_106,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004440.jpg,1,rare_class_diverse_regions,56.0,553_118,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004459.jpg,1,rare_class_diverse_regions,75.0,562_95,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004496.jpg,1,rare_class_diverse_regions,138.0,566_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004538.jpg,1,rare_class_diverse_regions,75.0,554_120,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004554.jpg,1,rare_class_diverse_regions,55.0,552_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004564.jpg,1,rare_class_diverse_regions,133.0,563_106,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004571.jpg,1,rare_class_diverse_regions,77.0,558_126,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004578.jpg,1,rare_class_diverse_regions,55.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004594.jpg,1,rare_class_diverse_regions,74.0,552_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004596.jpg,1,rare_class_diverse_regions,56.0,568_99,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004598.jpg,1,rare_class_diverse_regions,156.0,560_125,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004611.jpg,1,rare_class_diverse_regions,160.0,557_96,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004639.jpg,1,rare_class_diverse_regions,94.0,558_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004759.jpg,1,rare_class_diverse_regions,28.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004806.jpg,1,rare_class_diverse_regions,99.0,557_118,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004818.jpg,1,rare_class_diverse_regions,2.0,562_103,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004824.jpg,1,rare_class_diverse_regions,145.0,568_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004829.jpg,1,rare_class_diverse_regions,141.0,560_126,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004832.jpg,1,rare_class_diverse_regions,56.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004840.jpg,1,rare_class_diverse_regions,145.0,558_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004841.jpg,1,rare_class_diverse_regions,109.0,548_120,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004868.jpg,1,rare_class_diverse_regions,94.0,558_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004871.jpg,1,rare_class_diverse_regions,152.0,566_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004911.jpg,1,rare_class_diverse_regions,19.0,552_115,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004916.jpg,1,rare_class_diverse_regions,77.0,557_99,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004941.jpg,1,rare_class_diverse_regions,61.0,556_119,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004946.jpg,1,rare_class_diverse_regions,46.0,560_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004950.jpg,1,rare_class_diverse_regions,114.0,563_86,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004976.jpg,1,rare_class_diverse_regions,137.0,548_117,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train004994.jpg,1,rare_class_diverse_regions,138.0,568_97,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005021.jpg,1,rare_class_diverse_regions,2.0,556_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005036.jpg,1,rare_class_diverse_regions,55.0,558_125,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005052.jpg,1,rare_class_diverse_regions,86.0,551_150,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005074.jpg,1,rare_class_diverse_regions,87.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005097.jpg,1,rare_class_diverse_regions,139.0,551_151,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005101.jpg,1,rare_class_diverse_regions,109.0,547_117,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005110.jpg,1,rare_class_diverse_regions,77.0,557_99,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005129.jpg,1,rare_class_diverse_regions,42.0,564_100,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005147.jpg,1,rare_class_diverse_regions,109.0,547_115,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005194.jpg,1,rare_class_diverse_regions,55.0,560_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005197.jpg,1,rare_class_diverse_regions,78.0,554_104,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005255.jpg,1,rare_class_diverse_regions,123.0,558_97,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005276.jpg,1,rare_class_diverse_regions,117.0,549_96,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005283.jpg,1,rare_class_diverse_regions,126.0,557_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005288.jpg,1,rare_class_diverse_regions,20.0,555_84,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005324.jpg,1,rare_class_diverse_regions,74.0,561_93,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005344.jpg,1,rare_class_diverse_regions,123.0,562_102,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005352.jpg,1,rare_class_diverse_regions,61.0,553_116,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005372.jpg,1,rare_class_diverse_regions,77.0,559_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005427.jpg,1,rare_class_diverse_regions,75.0,558_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005431.jpg,1,rare_class_diverse_regions,20.0,559_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005444.jpg,1,rare_class_diverse_regions,150.0,559_101,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005485.jpg,1,rare_class_diverse_regions,2.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005487.jpg,1,rare_class_diverse_regions,76.0,559_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005489.jpg,1,rare_class_diverse_regions,133.0,561_97,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005495.jpg,1,rare_class_diverse_regions,42.0,560_122,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005500.jpg,1,rare_class_diverse_regions,139.0,565_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005501.jpg,1,rare_class_diverse_regions,141.0,563_105,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005515.jpg,1,rare_class_diverse_regions,169.0,556_102,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005520.jpg,1,rare_class_diverse_regions,150.0,564_107,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005564.jpg,1,rare_class_diverse_regions,61.0,550_106,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005575.jpg,1,rare_class_diverse_regions,81.0,566_97,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005580.jpg,1,rare_class_diverse_regions,75.0,556_125,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005594.jpg,1,rare_class_diverse_regions,141.0,560_117,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005640.jpg,1,rare_class_diverse_regions,160.0,560_125,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005682.jpg,1,rare_class_diverse_regions,65.0,552_121,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005689.jpg,1,rare_class_diverse_regions,76.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005690.jpg,1,rare_class_diverse_regions,57.0,560_123,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005747.jpg,1,rare_class_diverse_regions,156.0,557_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005762.jpg,1,rare_class_diverse_regions,12.0,561_102,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005771.jpg,1,rare_class_diverse_regions,69.0,551_103,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005778.jpg,1,rare_class_diverse_regions,20.0,550_106,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005842.jpg,1,rare_class_diverse_regions,42.0,566_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005851.jpg,1,rare_class_diverse_regions,79.0,558_117,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005855.jpg,1,rare_class_diverse_regions,78.0,550_94,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005875.jpg,1,rare_class_diverse_regions,81.0,560_117,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005889.jpg,1,rare_class_diverse_regions,116.0,550_105,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005902.jpg,1,rare_class_diverse_regions,133.0,557_124,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005936.jpg,1,rare_class_diverse_regions,69.0,551_103,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train005958.jpg,1,rare_class_diverse_regions,12.0,558_98,"['Habitat', 'Substrate', 'eventDate']",6,3
+fungi_train000038.jpg,1,rare_class_diverse_regions,135.0,560_123,"['Habitat', 'Substrate']",4,2
