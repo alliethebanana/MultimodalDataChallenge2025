@@ -222,3 +222,40 @@ def evaluate_network_on_test_set(
         writer.writerows(results)  # Write filenames and predictions
     print(f"Results saved to {output_csv_path}")
 
+
+def evaluate_network_on_final_set(
+        data_file, image_path, checkpoint_dir, session_name, model_config: ModelConfig):
+    """
+    Evaluate network on the test set and save predictions to a CSV file.
+    """
+    # Ensure checkpoint directory exists
+    ensure_folder(checkpoint_dir)
+
+    # Model and Test Setup
+    best_trained_model = os.path.join(checkpoint_dir, "best_accuracy.pth")
+    output_csv_path = os.path.join(checkpoint_dir, "final_predictions.csv")
+
+    test_loader = load_data.get_final_dataloader(
+        data_file, image_path, model_config.image_embedding_type == 'dino')
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    model = CompleteModel(model_config)
+    model.load_state_dict(torch.load(best_trained_model))
+    model.to(device)
+
+    # Collect Predictions
+    results = []
+    model.eval()
+    with torch.no_grad():
+        for images, labels, filenames, md in tqdm(test_loader, desc="Evaluating"):
+            images = images.to(device)
+            outputs = model.forward(images, md, device).argmax(1).cpu().numpy()
+            results.extend(zip(filenames, outputs))  # Store filenames and predictions only
+
+    # Save Results to CSV
+    with open(output_csv_path, mode="w", newline="") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow([session_name])  # Write session name as the first line
+        writer.writerows(results)  # Write filenames and predictions
+    print(f"Results saved to {output_csv_path}")
