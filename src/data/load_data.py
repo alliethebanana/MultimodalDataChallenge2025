@@ -51,6 +51,11 @@ class FungiDataset(Dataset):
     Making the fungi dataset
     """
     def __init__(self, df, path, train_test_final: str, use_dino: bool, transform=None):
+        self.cluster_index = pd.read_csv('cluster_index.csv')
+        if train_test_final == 'train':
+            ban_files = self.cluster_index[self.cluster_index['handdrawn'].values]['filename_index']
+            df = df[~df['filename_index'].isin(ban_files)]
+
         self.df = df
         self.metadata_dict = preprocess_metadata(df)
         self.transform = transform
@@ -58,7 +63,7 @@ class FungiDataset(Dataset):
         self.train_val_test = train_test_final
         self.use_dino = use_dino
 
-        self.cluster_index = pd.read_csv('cluster_index.csv')
+        
         self.dino_order = pd.read_csv(f'{train_test_final}_order.csv').values
 
         dino_features_path = f'image_features/dino_features_resize_1302_{train_test_final}.npy'
