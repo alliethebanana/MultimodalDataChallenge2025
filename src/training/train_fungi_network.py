@@ -94,7 +94,17 @@ def train_fungi_network(
 
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
     # Label smoothing for CrossEntropyLoss
-    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+    
+    # Compute class weights for imbalanced datasets
+    all_labels = []
+    for _, labels, _, _ in train_loader:
+        all_labels.extend(labels.cpu().numpy())
+    class_counts = np.bincount(all_labels)
+    class_weights = torch.tensor(1.0 / (class_counts + 1e-6), dtype=torch.float)
+    class_weights = class_weights / class_weights.sum() * len(class_counts)
+    class_weights = class_weights.to(device)
+
+    criterion = torch.nn.CrossEntropyLoss(weight=class_weights, label_smoothing=0.05)
 
     # Early stopping setup
     patience = model_config.patience

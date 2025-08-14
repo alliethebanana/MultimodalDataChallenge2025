@@ -24,7 +24,7 @@ from src.model.helpers.CyclicMonth import CyclicMonth
 from src.model.helpers.FourierLatLon import FourierLatLon
 
 def clip_encoding_habitat(data,num_classes,model,tokenizer):
-    num_to_string = {0:'null',
+    num_to_string = {0:'Habitat not specified',
                     1:'Mixed woodland (with coniferous and deciduous trees)',
                     2:'Unmanaged deciduous woodland', 
                     3:'Forest bog',
@@ -59,6 +59,7 @@ def clip_encoding_habitat(data,num_classes,model,tokenizer):
     text = text.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     with torch.no_grad():
         text_features = model.encode_text(text)
+        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
     return text_features
 
 def clip_encoding_substrate(data,num_classes,model,tokenizer):
