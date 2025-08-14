@@ -21,13 +21,13 @@ class SmallMLP(nn.Module):
         
         # Layers
         self.l1 = nn.Linear(in_features=input_dim, out_features=self.num_features, bias=True)
-        self.dropout1 = nn.Dropout(0.5)
+        self.dropout1 = nn.Dropout(0.25)
         self.l2 = nn.Linear(
             in_features=self.num_features, out_features=self.num_features, bias=True)
-        self.dropout2 = nn.Dropout(0.5)
+        self.dropout2 = nn.Dropout(0.25)
         self.l3 = nn.Linear(
             in_features=self.num_features, out_features=self.num_features, bias=True)
-        self.dropout3 = nn.Dropout(0.5)
+        self.dropout3 = nn.Dropout(0.25)
         self.l4 = nn.Linear(
             in_features=self.num_features, out_features=self.final_dim, bias=False)
                 
