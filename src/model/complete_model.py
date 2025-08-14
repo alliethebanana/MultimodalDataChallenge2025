@@ -17,6 +17,10 @@ from src.model.mlp import SmallMLP
 from src.util import convert_int_targets_to_one_hot
 
 
+from helpers.CyclicMonth import CyclicMonth
+from helpers.FourierLatLon import FourierLatLon
+
+
 class CompleteModel(nn.Module):
     """ 
     Model made to fit the model class we consider in the article
@@ -77,6 +81,10 @@ class CompleteModel(nn.Module):
                 case 'default':
                     self.date_emb = lambda x: x
                     metadata_emb_size += 1
+                case 'cyclic_month':
+                    self.date_emb = CyclicMonth()      # -> (N, 2)
+                    date_emb_size = 2
+                    metadata_emb_size += date_emb_size
                 case _:
                     raise ValueError(
                         f'event_date embedding type not recognized: {md_emb_type.event_date}')
@@ -98,6 +106,9 @@ class CompleteModel(nn.Module):
                         f'substrate embedding type not recognized: {md_emb_type.substrate}')
             
             match(md_emb_type.location):
+                case 'fourier':
+                    self.location_emb = FourierLatLon()
+                    metadata_emb_size += 4 * self.location_emb.n_freqs
                 case 'default':
                     self.location_emb = lambda x: x
                     metadata_emb_size += 2
@@ -186,8 +197,7 @@ class CompleteModel(nn.Module):
             embedding_location = self.location_emb(locations)
             
             embedded_metadata = torch.concat(
-                [torch.unsqueeze(embedded_date, 1), 
-                embedded_habitat, embedded_substrate, embedding_location], dim = 1)
+                [embedded_date, embedded_habitat, embedded_substrate, embedding_location], dim = 1)
             embedded_metadata = embedded_metadata.float()
             embedded_metadata = self.before_comb_model(embedded_metadata)
             
