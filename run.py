@@ -3,14 +3,14 @@ Run Script for training fungi classification models
 
 
 Usage:
-    run.py train --checkpoint-folder=<file> --image-folder=<file> --metadata-folder=<file> --model-config=<file> [options]
-    run.py evaluate --checkpoint-folder=<file> --image-folder=<file> --metadata-folder=<file> --model-config=<file> [options]
+    run.py train --checkpoint-folder=<file> --image-folder=<file> --metadata-path=<file> --model-config=<file> [options]
+    run.py evaluate --checkpoint-folder=<file> --image-folder=<file> --metadata-path=<file> --model-config=<file> [options]
     
 Options:
     -h --help                               show this screen.
     --checkpoint-folder=<file>              folder to save trained model(s) in
     --image-folder=<file>                   folder to load images from  
-    --metadata-folder=<file>                folder to load meta data from 
+    --metadata-path=<file>                folder to load meta data from 
     --model-config=<file>                   path to model config
     --session=<string>                      session name [default: EfficientNet]
     --log=<string>                          log level to use [default: info]  
@@ -45,8 +45,8 @@ def train(args:Dict) -> None:
     image_path = args['--image-folder'] if args['--image-folder'] else ''
 
     # Path to metadata file
-    # metadata_folder = 'starting_metadata'
-    metadata_folder = args['--metadata-folder'] if args['--metadata-folder'] else ''
+    # metadata_path = 'starting_metadata'
+    metadata_path = args['--metadata-path'] if args['--metadata-path'] else ''
 
     # Session name: Change session name for every experiment! 
     # Session name will be saved as the first line of the prediction file
@@ -58,7 +58,7 @@ def train(args:Dict) -> None:
 
     model_config_path = args['--model-config'] if args['--model-config'] else ''
 
-    if image_path == '' or metadata_folder == '' or checkpoint_dir == '' or model_config_path == '':
+    if image_path == '' or metadata_path == '' or checkpoint_dir == '' or model_config_path == '':
         raise ValueError('Image, metadata, checkpoint and model config paths must be given.')
 
     device = 'cuda' if args['--cuda'] else 'cpu'
@@ -67,14 +67,12 @@ def train(args:Dict) -> None:
     logging.info('train_fungi_network')
 
     checkpoint_session = os.path.join(checkpoint_dir, session)
-    train_metadata_path = os.path.join(metadata_folder, 'train_metadata.csv')
-    test_metadata_path = os.path.join(metadata_folder, 'test_metadata.csv')
 
     model_config = load_model_config(model_config_path)
 
-    train_fungi_network(train_metadata_path, image_path, checkpoint_session, model_config)
+    train_fungi_network(metadata_path, image_path, checkpoint_session, model_config)
     logging.info('evaluate_network_on_test_set')
-    evaluate_network_on_test_set(test_metadata_path, image_path, checkpoint_session, session, model_config)
+    evaluate_network_on_test_set(metadata_path, image_path, checkpoint_session, session, model_config)
     
     logging.info('train_fungi_network end')
 
@@ -87,7 +85,7 @@ def evaluate(args:Dict) -> None:
     image_path = args['--image-folder'] if args['--image-folder'] else ''
 
     # Path to metadata file
-    metadata_folder = args['--metadata-folder'] if args['--metadata-folder'] else ''
+    metadata_path = args['--metadata-path'] if args['--metadata-path'] else ''
 
     # Session name: Change session name for every experiment! 
     # Session name will be saved as the first line of the prediction file
@@ -98,7 +96,7 @@ def evaluate(args:Dict) -> None:
 
     model_config_path = args['--model-config'] if args['--model-config'] else ''
 
-    if image_path == '' or metadata_folder == '' or checkpoint_dir == '' or model_config_path == '':
+    if image_path == '' or metadata_path == '' or checkpoint_dir == '' or model_config_path == '':
         raise ValueError('Image, metadata, checkpoint and model config paths must be given.')
 
     device = 'cuda' if args['--cuda'] else 'cpu'
@@ -106,7 +104,7 @@ def evaluate(args:Dict) -> None:
     logging.info('Device: %s', device)
 
     checkpoint_session = os.path.join(checkpoint_dir, session)
-    test_metadata_path = os.path.join(metadata_folder, 'test_metadata.csv')
+    test_metadata_path = os.path.join(metadata_path, 'test_metadata.csv')
 
     model_config = load_model_config(model_config_path)
 
