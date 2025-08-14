@@ -23,7 +23,7 @@ from src.util import convert_int_targets_to_one_hot
 from src.model.helpers.CyclicMonth import CyclicMonth
 from src.model.helpers.FourierLatLon import FourierLatLon
 
-def clip_encoding_habitat(data,model,tokenizer):
+def clip_encoding_habitat(data,num_classes,model,tokenizer):
     num_to_string = {0:'null',
                     1:'Mixed woodland (with coniferous and deciduous trees)',
                     2:'Unmanaged deciduous woodland', 
@@ -54,13 +54,14 @@ def clip_encoding_habitat(data,model,tokenizer):
                     27:'fallow field',
                     28:'ditch',
                     29:'fertilized field in rotation'}
-    data = torch.tensor([num_to_string[int(x)] for x in data])
+    data = [num_to_string[int(x)] for x in data]
     text = tokenizer(data)
+    text = text.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     with torch.no_grad():
         text_features = model.encode_text(text)
     return text_features
 
-def clip_encoding_substrate(data,model,tokenizer):
+def clip_encoding_substrate(data,num_classes,model,tokenizer):
     num_to_string = {0:'null',
     1:'soil',
     2:'leaf or needle litter',
@@ -83,8 +84,9 @@ def clip_encoding_substrate(data,model,tokenizer):
     19:'cones',
     20:'fruits',
     21:'catkins'}
-    data = torch.tensor([num_to_string[int(x)] for x in data])
+    data = [num_to_string[int(x)] for x in data]
     text = tokenizer(data)
+    text = text.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     with torch.no_grad():
         text_features = model.encode_text(text)
     return text_features
@@ -280,8 +282,8 @@ class CompleteModel(nn.Module):
 
             
             embedded_date = self.date_emb(dates)
-            embedded_habitat = self.habitat_emb(habitats, self.num_habitat_classes)
-            embedded_substrate = self.substrate_emb(substrates, self.num_substrate_classes)
+            embedded_habitat = self.habitat_emb(habitats, self.num_habitat_classes).to(device)
+            embedded_substrate = self.substrate_emb(substrates, self.num_substrate_classes).to(device)
             embedding_location = self.location_emb(locations)
             
             embedded_metadata = torch.concat(

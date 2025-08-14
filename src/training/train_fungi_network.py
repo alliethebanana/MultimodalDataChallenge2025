@@ -87,6 +87,7 @@ def train_fungi_network(
 
     model = CompleteModel(model_config)
     model.to(device)
+    model.clip.to(device)
 
     # Define Optimization, Scheduler, and Criterion
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
