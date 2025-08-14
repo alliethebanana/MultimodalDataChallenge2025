@@ -13,6 +13,7 @@ from torchvision import models
 
 from src.config.model_config import ModelConfig
 from src.data import metadata_util
+from src.model.mlp import SmallMLP
 from src.util import convert_int_targets_to_one_hot
 
 
@@ -133,9 +134,20 @@ class CompleteModel(nn.Module):
         match(self.model_config.classifier_after_combination):
             case 'default':
                 self.classifier = nn.Sequential(
-                    nn.Linear(self.size_after_combination, 200, bias=True),
+                    nn.Linear(self.size_after_combination, 500, bias=True),
                     nn.Dropout(0.2),
-                    nn.Linear(200, self.num_targets, bias = True)
+                    nn.Linear(500, self.num_targets, bias = True)
+                    )
+            case 'mlp':
+                mlp_model = SmallMLP(
+                    self.size_after_combination, 
+                    final_dim=400,
+                    num_features=512,
+                    nonlinearity= 'leaky_relu')
+                self.classifier = nn.Sequential(
+                    mlp_model,
+                    nn.Dropout(0.1),
+                    nn.Linear(400, self.num_targets, bias = True)
                     )
             case _:
                 raise ValueError(

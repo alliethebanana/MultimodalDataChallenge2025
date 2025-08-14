@@ -1,7 +1,7 @@
 {
     "random_seed": 0,
     "image_embedding_type": "default",
-    "image_embedding_size": 200,
+    "image_embedding_size": 500,
     "unknown_as_token": true,
     "metadata_embedding_type": {
         "habitat": "default",

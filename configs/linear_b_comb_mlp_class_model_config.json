@@ -1,7 +1,7 @@
 {
     "random_seed": 0,
     "image_embedding_type": "default",
-    "image_embedding_size": 500,
+    "image_embedding_size": 200,
     "unknown_as_token": true,
     "metadata_embedding_type": {
         "habitat": "default",
@@ -11,6 +11,6 @@
     },
     "metadata_embedding_model_before_comb": "linear",
     "combination_type": "concat",
-    "classifier_after_combination": "default",
+    "classifier_after_combination": "mlp",
     "patience": 5
 }
