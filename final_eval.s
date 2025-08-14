@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --time=95:00:00
 #SBATCH --mem=14gb
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:Ampere:1
 #SBATCH --mail-user=bmgi@dtu.dk
 #SBATCH --mail-type=END,FAIL
 #SBATCH --export=ALL
@@ -30,7 +30,7 @@ conda activate mmss
 
 echo -e "Working dir: $(pwd)\n"
 
-python run.py train --checkpoint-folder=results --image-folder=/scratch/bmgi/FungiImages --metadata-path=starting_metadata/metadata-v_12.csv --model-config=configs/default_dino_model_config.json --session=default_dino_meta_v12 --cuda
+python run.py final --checkpoint-folder=results --image-folder=/scratch/bmgi/FungiImages --metadata-path=starting_metadata/metadata-v_12.csv --model-config=configs/default_dino_model_config.json --session=default_dino_meta_v12 --cuda
 
 
 echo "Done: $(date +%F-%R:%S)"

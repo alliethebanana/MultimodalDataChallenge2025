@@ -105,13 +105,12 @@ def evaluate(args:Dict) -> None:
     logging.info('Device: %s', device)
 
     checkpoint_session = os.path.join(checkpoint_dir, session)
-    test_metadata_path = os.path.join(metadata_path, 'test_metadata.csv')
 
     model_config = load_model_config(model_config_path)
 
     logging.info('evaluate_network_on_test_set')
     evaluate_network_on_test_set(
-        test_metadata_path, image_path, checkpoint_session, session, model_config)
+        metadata_path, image_path, checkpoint_session, session, model_config)
     
     logging.info('evaluate_fungi_network end')
 
@@ -143,13 +142,12 @@ def final(args:Dict) -> None:
     logging.info('Device: %s', device)
 
     checkpoint_session = os.path.join(checkpoint_dir, session)
-    test_metadata_path = os.path.join(metadata_path, 'test_metadata.csv')
 
     model_config = load_model_config(model_config_path)
 
     logging.info('evaluate_network_on_test_set')
     evaluate_network_on_final_set(
-        test_metadata_path, image_path, checkpoint_session, session, model_config)
+        metadata_path, image_path, checkpoint_session, session, model_config)
     
     logging.info('train_fungi_network end')
 
