@@ -57,6 +57,9 @@ class FungiDataset(Dataset):
         self.path = path
         self.train_val_test = train_test_final
 
+        self.cluster_index = pd.read_csv('cluster_index.csv')
+        self.dino_order = pd.read_csv(f'{train_test_final}_order.csv').values
+
         dino_features_path = f'image_features/dino_features_resize_1302_{train_test_final}.npy'
         self.dino_features_array = np.load(dino_features_path)
 
@@ -72,6 +75,9 @@ class FungiDataset(Dataset):
             label = -1  # Handle missing labels for the test dataset
         else:
             label = int(label)
+        
+        dino_filter = (self.dino_order == file_path).squeeze()
+        dino = self.dino_features_array[dino_filter].squeeze()
         
         date = self.metadata_dict['eventDate'][idx]
         habitat = self.metadata_dict['Habitat'][idx]
@@ -90,7 +96,7 @@ class FungiDataset(Dataset):
             augmented = self.transform(image=image)
             image = augmented['image']
 
-        return image, label, file_path, md
+        return image, label, file_path, md, dino
 
 
 def get_train_dataloaders(

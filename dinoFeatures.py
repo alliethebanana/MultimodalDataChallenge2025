@@ -6,6 +6,7 @@ from glob import glob
 import os
 import numpy as np
 from tqdm import tqdm
+import pandas as pd
 
 dinov2_vits14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
 dinov2_vits14.eval()
@@ -49,11 +50,13 @@ class FungiImageDataset(Dataset):
         return img
 
 # Load image paths
-img_files = glob("FungiImages/fungi_train*.jpg")
+img_files = pd.read_csv("final_order.csv").filename_index.tolist()
+img_files = [f"FungiImages/{file}" for file in img_files]
+# img_files = glob("FungiImages/fungi_final*.jpg")
 
 # Create dataset and dataloader
 dataset = FungiImageDataset(img_files, transform=transform)
-dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, pin_memory=True, persistent_workers=True)
+dataloader = DataLoader(dataset, batch_size=64, shuffle=False, num_workers=16, pin_memory=True, persistent_workers=True)
 
 # Example: iterate through the dataloader
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -65,4 +68,4 @@ for img_tensor in tqdm(dataloader):
         features = dinov2_vits14(img_tensor)
     features.cpu()
     dino_features.append(features.cpu().numpy())
-np.save("dino_features_crop.npy", np.vstack(dino_features))
+np.save("dino_features_resize_1302_final2.npy", np.vstack(dino_features))

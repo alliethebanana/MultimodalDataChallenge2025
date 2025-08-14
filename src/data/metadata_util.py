@@ -72,8 +72,10 @@ def preprocess_dates(dates: NDArray):
     """ Make dates into values """ 
     processed_dates = [0 if pd.isnull(d) else get_month_from_date(d) 
                        for d in dates]
+    processed_dates = np.array(processed_dates, dtype=float)
+    processed_dates = np.cos(2 * np.pi * processed_dates / 12)
 
-    return np.array(processed_dates, dtype=float)
+    return processed_dates
 
 
 def preprocess_location(
