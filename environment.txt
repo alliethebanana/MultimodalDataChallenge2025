@@ -12,6 +12,8 @@ pip3 install torch torchvision
 
 conda install conda-forge::geohash2
 
+pip install open-clip-torch
+
 
 Installing mmss environment on GPU machine:
 
@@ -29,4 +31,5 @@ python -m pip install torch torchvision
 
 conda install conda-forge::geohash2
 
+python -m pip install open-clip-torch
 
