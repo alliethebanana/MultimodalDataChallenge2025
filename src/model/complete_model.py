@@ -5,9 +5,11 @@ Model incorporating all steps
 """
 
 from typing import Tuple
+from functools import partial
 
 import torch
 import torch.nn as nn
+import open_clip
 
 from torchvision import models
 
@@ -19,6 +21,12 @@ from src.util import convert_int_targets_to_one_hot
 
 from helpers.CyclicMonth import CyclicMonth
 from helpers.FourierLatLon import FourierLatLon
+
+def clip_encoding(text,model,tokenizer):
+    text = tokenizer(habs)
+    with torch.no_grad():
+        text_features = model.encode_text(text)
+    return text_features
 
 
 class CompleteModel(nn.Module):
@@ -41,7 +49,10 @@ class CompleteModel(nn.Module):
             num_substrates = num_substrates + 1 
         
         self.num_habitat_classes = num_habitats
-        self.num_substrate_classes = num_substrates 
+        self.num_substrate_classes = num_substrates
+
+        self.clip, _, _ = open_clip.create_model_and_transforms('ViT-B-32', pretrained='openai')
+        self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
 
         self.build_model()
 
@@ -93,6 +104,10 @@ class CompleteModel(nn.Module):
                 case 'default':
                     self.habitat_emb = convert_int_targets_to_one_hot
                     metadata_emb_size += self.num_habitat_classes
+                case 'clip':
+                    self.habitat_emb = partial(clip_encoding,model=self.clip,tokenizer=self.tokenizer)
+                    metadata_emb_size += 512
+                    
                 case _:
                     raise ValueError(
                         f'habitat embedding type not recognized: {md_emb_type.habitat}')
@@ -101,6 +116,9 @@ class CompleteModel(nn.Module):
                 case 'default':
                     self.substrate_emb = convert_int_targets_to_one_hot
                     metadata_emb_size += self.num_substrate_classes
+                case 'clip':
+                    self.substrate_emb = partial(clip_encoding,model=self.clip,tokenizer=self.tokenizer)
+                    metadata_emb_size += 512
                 case _:
                     raise ValueError(
                         f'substrate embedding type not recognized: {md_emb_type.substrate}')
