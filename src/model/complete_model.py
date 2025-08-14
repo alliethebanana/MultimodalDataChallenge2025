@@ -17,8 +17,8 @@ from src.model.mlp import SmallMLP
 from src.util import convert_int_targets_to_one_hot
 
 
-from helpers.CyclicMonth import CyclicMonth
-from helpers.FourierLatLon import FourierLatLon
+from src.model.helpers.CyclicMonth import CyclicMonth
+from src.model.helpers.FourierLatLon import FourierLatLon
 
 
 class CompleteModel(nn.Module):
